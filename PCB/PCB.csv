@@ -1,0 +1,19 @@
+Reference,Qty,Value,DNP,Exclude from BOM,Exclude from Board,Footprint,Datasheet
+"C1,C2,C3,C4,C5,C6,CC1,CC2,CC3",9,1uF,,,,Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,https://www.thegioiic.com/tu-gom-0603-1uf-25v
+C9,1,680uF,,,,Capacitor_THT:CP_Radial_D8.0mm_P5.00mm,https://www.thegioiic.com/tu-hoa-680uf-25v-10x17mm-xuyen-lo
+C10,1,560uF,,,,Capacitor_THT:CP_Radial_D8.0mm_P5.00mm,https://www.thegioiic.com/tu-hoa-680uf-25v-10x17mm-xuyen-lo
+"CFF1,CFF2,CFF3",3,33nF,,,,Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,https://www.thegioiic.com/tu-gom-0603-33nf-50v
+"CIN1,CIN2,CIN3",3,220uF/50V,,,,Capacitor_THT:CP_Radial_D8.0mm_P5.00mm,https://www.thegioiic.com/tu-hoa-220uf-50v-10x13mm-xuyen-lo
+"COUT1,COUT2,COUT3",3,330uF/25V,,,,Capacitor_THT:CP_Radial_D8.0mm_P5.00mm,https://www.thegioiic.com/tu-hoa-330uf-25v-8x12-5mm-xuyen-lo
+"D1,D2,D3,D4",4,1N5822,,,,Diode_SMD:D_SMA_Handsoldering,https://www.thegioiic.com/1n5822-diode-schottky-40v-3a-do-201ad
+"J1,J2",2,MCU POWER,,,,footprint,https://www.thegioiic.com/ss54-sma-diode-shotky-5a-40v
+"J3,J4,J5,J6,J7,J8,J9,J10,J11,J12,J13,J14,J15,J16,J17,J18,J19,J20",18,Conn_01x03,,,,Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical,https://www.thegioiic.com/kf128-2-v-domino-2-chan-thang-5mm-300v-10a-han-pcb-loai-tot
+J21,1,Ultrasonic_Sensor,,,,Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,https://www.thegioiic.com/hang-rao-duc-don-2-54mm-40-chan-1-hang-cao-11-2mm-xuyen-lo-chan-dong-ma-niken
+"L1,L2,L3",3,47uH/5A,,,,Inductor_SMD:L_12x12mm_H8mm,https://www.thegioiic.com/cuon-cam-dan-smd-cdrh127-1280-180-18uh-6-6a
+L4,1,22uH,,,,Inductor_SMD:L_12x12mm_H8mm,https://www.thegioiic.com/cuon-cam-dan-smd-cdrh74-7345-220-22uh-1-23a
+"R1,R4,R6",3,3.3k,,,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,https://www.thegioiic.com/dien-tro-3-kohm-1-4w-1-5-vong-mau
+"R2,R3,R5",3,10k,,,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,https://www.thegioiic.com/dien-tro-10-kohm-1-4w-1-5-vong-mau
+U1,1,ESP32-DEVKITC,,,,MyLibrary:ESP32-DEVKITC,
+"U2,U3",2,PCA9685,,,,MyLibrary:PCA9685,
+"U4,U5,U6",3,XL4015,,,,Package_TO_SOT_SMD:TO-263-5_TabPin3,http://www.xlsemi.net/datasheet/XL4015%20datasheet-English.pdf
+U7,1,LM2596S-5,,,,Package_TO_SOT_SMD:TO-263-5_TabPin3,http://www.ti.com/lit/ds/symlink/lm2596.pdf
