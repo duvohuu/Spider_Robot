@@ -1,0 +1,135 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{lm2596}{manual}{}{}
+      \name{author}{1}{}{%
+        {{hash=67e54b1ee931f3f4bddfefa5fbde5fd8}{%
+           family={{Texas Instruments}},
+           familyi={T\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Texas Instruments}%
+      }
+      \strng{namehash}{67e54b1ee931f3f4bddfefa5fbde5fd8}
+      \strng{fullhash}{67e54b1ee931f3f4bddfefa5fbde5fd8}
+      \strng{fullhashraw}{67e54b1ee931f3f4bddfefa5fbde5fd8}
+      \strng{bibnamehash}{67e54b1ee931f3f4bddfefa5fbde5fd8}
+      \strng{authorbibnamehash}{67e54b1ee931f3f4bddfefa5fbde5fd8}
+      \strng{authornamehash}{67e54b1ee931f3f4bddfefa5fbde5fd8}
+      \strng{authorfullhash}{67e54b1ee931f3f4bddfefa5fbde5fd8}
+      \strng{authorfullhashraw}{67e54b1ee931f3f4bddfefa5fbde5fd8}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{3}
+      \field{title}{LM2596 Simple Switcher® Power Converter 3A Step-Down Voltage Regulator}
+      \field{urlday}{19}
+      \field{urlmonth}{9}
+      \field{urlyear}{2025}
+      \field{year}{2023}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://www.ti.com/lit/ds/symlink/lm2596.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.ti.com/lit/ds/symlink/lm2596.pdf
+      \endverb
+    \endentry
+    \entry{vishay_tcrt5000_2}{manual}{}{}
+      \name{author}{1}{}{%
+        {{hash=1a63d4b75b9b255b59d6c39df084816c}{%
+           family={{Vishay Semiconductors}},
+           familyi={V\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Vishay Semiconductors}%
+      }
+      \strng{namehash}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{fullhash}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{fullhashraw}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{bibnamehash}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{authorbibnamehash}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{authornamehash}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{authorfullhash}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{authorfullhashraw}{1a63d4b75b9b255b59d6c39df084816c}
+      \field{extraname}{1}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{1}
+      \field{title}{Application of Optical Reflex Sensors}
+      \field{urlday}{19}
+      \field{urlmonth}{9}
+      \field{urlyear}{2025}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://www.vishay.com/docs/80107/80107.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.vishay.com/docs/80107/80107.pdf
+      \endverb
+    \endentry
+    \entry{vishay_tcrt5000_1}{manual}{}{}
+      \name{author}{1}{}{%
+        {{hash=1a63d4b75b9b255b59d6c39df084816c}{%
+           family={{Vishay Semiconductors}},
+           familyi={V\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Vishay Semiconductors}%
+      }
+      \strng{namehash}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{fullhash}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{fullhashraw}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{bibnamehash}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{authorbibnamehash}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{authornamehash}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{authorfullhash}{1a63d4b75b9b255b59d6c39df084816c}
+      \strng{authorfullhashraw}{1a63d4b75b9b255b59d6c39df084816c}
+      \field{extraname}{2}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{1}
+      \field{title}{Reflective Optical Sensor with Transistor Output}
+      \field{urlday}{19}
+      \field{urlmonth}{9}
+      \field{urlyear}{2025}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://www.vishay.com/docs/83760/tcrt5000.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.vishay.com/docs/83760/tcrt5000.pdf
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
