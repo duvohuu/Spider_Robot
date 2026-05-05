@@ -33,6 +33,35 @@
     emphstyle=\color{purple!80!blue},
 }
 
+\lstdefinestyle{Rstyle}{
+    language=R,
+    basicstyle=\small\ttfamily,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt,
+    tabsize=2,
+    breaklines=true,
+    breakatwhitespace=false,
+    xleftmargin=1.5em,
+    framexleftmargin=1.5em,
+    keywordstyle=\color{blue!70!black}\bfseries,
+    commentstyle=\color{green!50!black}\itshape,
+    stringstyle=\color{orange!80!black},
+    identifierstyle=\color{black},
+    frame=single,
+    rulecolor=\color{black!30},
+    backgroundcolor=\color{gray!5},
+    showstringspaces=false,
+    captionpos=b,
+    morekeywords={data.frame,library,require,function,return,if,else,for,while,repeat,in,next,break,TRUE,FALSE,NULL,NA,NaN,Inf},
+    emph={anova,shapiro.test,aov,t.test,wilcox.test,chisq.test,lm,glm,summary},
+    emphstyle=\color{magenta!80!black}\bfseries,
+    literate=
+        {<-}{{{\color{red!70!black}\textbf{<-}}}}2
+        {\%>\%}{{{\color{teal!70!black}\textbf{\%>\%}}}}3
+}
+
 % Footnote and References
 \usepackage[style=numeric,backend=biber]{biblatex} % Sử dụng gói biblatex
 \usepackage{capt-of} %  Footnote trong caption
@@ -49,6 +78,7 @@
 \usepackage{xcolor}
 \usepackage{colortbl}
 \usepackage[export]{adjustbox}
+\usepackage{lscape} 
 
 % Thiết lập công thức toán học
 \usepackage{amsmath} % Gói hỗ trợ các công thức toán học
@@ -86,9 +116,9 @@
 \pagestyle{fancy}
 
 % Đánh số theo section
-\numberwithin{equation}{section}  % Công thức: (1.1), (1.2), (2.1)...
-\numberwithin{figure}{section}    % Hình: Figure 1.1, Figure 1.2...
-\numberwithin{table}{section}     % Bảng: Table 1.1, Table 1.2...
+\numberwithin{equation}{chapter}  % Công thức: (1.1), (1.2), (2.1)...
+\numberwithin{figure}{chapter}    % Hình: Figure 1.1, Figure 1.2...
+\numberwithin{table}{chapter}     % Bảng: Table 1.1, Table 1.2...
 \AtBeginDocument{%
     \counterwithin{lstlisting}{section}
 }

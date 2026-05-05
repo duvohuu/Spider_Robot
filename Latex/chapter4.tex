@@ -1,0 +1,121 @@
+\chapter{THIẾT KẾ KHÁI QUÁT}
+    \section{Thiết kế khái quát điện}
+        \subsection{Lựa chọn phương án điện}
+            \subsubsection{Phương án vi điều khiển (Microcontroller)}
+
+            \hspace{0.5cm} Vi điều khiển là thành phần trung tâm của hệ thống điều khiển, chịu trách nhiệm tính toán thuật toán IK, điều phối gait controller, giao tiếp với các module ngoại vi và xử lý lệnh điều khiển từ xa. Nhóm đề xuất và so sánh ba phương án vi điều khiển phổ biến:
+
+            \begin{table}[H]
+            \centering
+            \caption{So sánh các phương án vi điều khiển}
+            \label{tab:mcu_options}
+            \begin{tabular}{|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3.8cm}|}
+            \hline
+            \textbf{Tiêu chí} & \textbf{Arduino Mega 2560} & \textbf{STM32F103C8T6} & \textbf{ESP32} \\
+            \hline
+            \textbf{Xung nhịp} & 16 MHz & 72 MHz & 240 MHz (dual-core) \\
+            \hline
+            \textbf{RAM} & 8 KB & 20 KB & 520 KB \\
+            \hline
+            \textbf{WiFi / Bluetooth} & Không & Không & Tích hợp sẵn \\
+            \hline
+            \textbf{Giao tiếp} & UART, SPI, I\textsuperscript{2}C & UART, SPI, I\textsuperscript{2}C & UART, SPI, I\textsuperscript{2}C, CAN \\
+            \hline
+            \textbf{Môi trường lập trình} & Arduino IDE & STM32CubeIDE, VSCode + PlatformIO & Arduino IDE, VSCode + ESP-IDF, PlatformIO \\
+            \hline
+            \end{tabular}
+            \end{table}
+
+            \textbf{Kết luận:} Nhóm lựa chọn \textbf{ESP32} làm vi điều khiển trung tâm. Với xung nhịp 240 MHz dual-core và RAM 520 KB, ESP32 đủ năng lực xử lý đồng thời thuật toán IK cho 6 chân và gait controller trong thời gian thực. WiFi và Bluetooth tích hợp sẵn loại bỏ hoàn toàn nhu cầu thêm module không dây ngoài, giúp đơn giản hóa phần cứng và giảm chi phí. ESP32 cũng hỗ trợ linh hoạt nhiều môi trường lập trình (Arduino IDE, VSCode + ESP-IDF, PlatformIO), thuận tiện cho quá trình phát triển. Arduino Mega 2560 bị loại do xung nhịp thấp (16 MHz) không đủ để xử lý IK realtime cho 6 chân và không có giao tiếp không dây tích hợp. STM32F103C8T6 tuy hiệu năng tốt nhưng yêu cầu STM32CubeIDE chuyên biệt và không hỗ trợ không dây, làm tăng độ phức tạp tích hợp hệ thống.
+
+                        \subsubsection{Phương án cảm biến vật cản}
+
+            \hspace{0.5cm} Cảm biến vật cản giúp robot phát hiện chướng ngại vật phía trước trong quá trình di chuyển, là nền tảng cho các tính năng tự tránh va chạm. Nhóm xem xét ba nhóm cảm biến phổ biến:
+
+            \begin{table}[H]
+            \centering
+            \caption{So sánh các nhóm cảm biến vật cản}
+            \label{tab:sensor_options}
+            \begin{tabular}{|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3.8cm}|}
+            \hline
+            \textbf{Tiêu chí} & \textbf{Cảm biến siêu âm} & \textbf{Cảm biến hồng ngoại} & \textbf{Cảm biến thu phát (ToF / Laser)} \\
+            \hline
+            \textbf{Nguyên lý} & Phản xạ sóng âm & Phản xạ tia hồng ngoại & Đo thời gian bay của xung ánh sáng \\
+            \hline
+            \textbf{Tầm đo} & 2 -- 400 cm & 2 -- 30 cm & 3 -- 200 cm \\
+            \hline
+            \textbf{Ảnh hưởng ánh sáng} & Không & Có & Không \\
+            \hline
+            \textbf{Giao tiếp} & GPIO (Trig/Echo) & GPIO (analog/digital) & I\textsuperscript{2}C / UART \\
+            \hline
+            \textbf{Độ chính xác} & $\pm$3 mm & $\pm$5 mm & $\pm$1 mm \\
+            \hline
+            \textbf{Chi phí} & Thấp & Rất thấp & Cao \\
+            \hline
+            \end{tabular}
+            \end{table}
+
+            \textbf{Kết luận:} Nhóm lựa chọn \textbf{cảm biến siêu âm HC-SRF05} cho phương án phát hiện vật cản. HC-SRF05 là phiên bản cải tiến của HC-SR04, hỗ trợ thêm chế độ 1 dây (OUT mode), tầm đo 2--450 cm và độ chính xác tương đương. Cảm biến siêu âm không bị ảnh hưởng bởi ánh sáng môi trường, phù hợp hoạt động trong nhiều điều kiện chiếu sáng khác nhau. Cảm biến hồng ngoại bị loại do tầm đo ngắn ($<$30 cm) và dễ bị nhiễu bởi ánh sáng, không đủ để phát hiện vật cản kịp thời khi robot di chuyển. Nhóm cảm biến thu phát (ToF/Laser) tuy chính xác hơn nhưng có chi phí cao hơn đáng kể và không cần thiết với độ chính xác đó cho bài toán tránh vật cản đơn giản.
+
+                        \subsubsection{Phương án động cơ}
+
+            \hspace{0.5cm} Phần tử dẫn động là thành phần quan trọng nhất trong hệ thống chân robot, trực tiếp quyết định khả năng chuyển động và tải trọng của robot. Nhóm so sánh ba nhóm động cơ phù hợp cho ứng dụng robot nhện cỡ nhỏ:
+
+            \begin{table}[H]
+            \centering
+            \caption{So sánh các nhóm động cơ}
+            \label{tab:motor_options}
+            \begin{tabular}{|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3.8cm}|}
+            \hline
+            \textbf{Tiêu chí} & \textbf{Servo RC} & \textbf{Động cơ BLDC} & \textbf{Động cơ DC + encoder + hộp số} \\
+            \hline
+            \textbf{Điều khiển vị trí} & PWM (50 Hz) & ESC + encoder / FOC & PWM + driver + đọc encoder \\
+            \hline
+            \textbf{Phản hồi vị trí} & Không đọc được từ ngoài & Cần encoder ngoài + FOC & Cần xử lý encoder riêng \\
+            \hline
+            \textbf{Driver tích hợp} & Có & Không, cần ESC riêng & Không \\
+            \hline
+            \textbf{Độ phức tạp tích hợp} & Thấp & Rất cao & Cao \\
+            \hline
+            \textbf{Chi phí (18 khớp)} & Thấp & Cao & Trung bình \\
+            \hline
+            \end{tabular}
+            \end{table}
+
+            \textbf{Kết luận:} Nhóm lựa chọn nhóm \textbf{servo RC}, cụ thể là \textbf{MG996R}, cho toàn bộ 18 khớp của robot. Servo RC tích hợp sẵn hộp số, mạch điều khiển và cơ cấu hồi tiếp vị trí nội bộ, chỉ cần tín hiệu PWM từ vi điều khiển là đủ để định vị góc — điều này giúp đơn giản hóa tối đa phần cứng. MG996R với bánh răng kim loại cung cấp moment xoắn 9.4--11 kgf.cm, đủ đáp ứng tải trọng robot dưới 1.5 kg với chi phí hợp lý. Động cơ BLDC bị loại do để điều khiển vị trí chính xác cần thêm ESC, encoder ngoài và giải thuật FOC, làm tăng độ phức tạp tích hợp lên rất cao so với yêu cầu đề tài. Nhóm động cơ DC bị loại do yêu cầu thêm mạch driver H-bridge, xử lý encoder riêng biệt, làm tăng đáng kể độ phức tạp phần cứng và phần mềm.
+
+                        \subsubsection{Phương án nguồn điện}
+
+            \hspace{0.5cm} Hệ thống robot nhện có hai nhóm tải điện với đặc tính khác nhau rõ rệt: (1) nhóm servo động cơ tiêu thụ dòng cao ($\sim$1--2.5 A/servo lúc tải) và gây nhiễu điện áp lớn; (2) nhóm mạch điều khiển (vi điều khiển, cảm biến, module) yêu cầu điện áp ổn định và nhiễu thấp. Nhóm đề xuất và so sánh hai phương án cấp nguồn:
+
+            \begin{table}[h!]
+            \centering
+            \caption{So sánh các phương án nguồn điện}
+            \label{tab:power_options}
+            \begin{tabular}{|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{5.5cm}|>{\centering\arraybackslash}m{5.5cm}|}
+            \hline
+            \textbf{Tiêu chí} & \textbf{Một nguồn duy nhất} & \textbf{Hai nguồn tách biệt} \\
+            \hline
+            \textbf{Cách ly nhiễu servo} & Không & Có \\
+            \hline
+            \textbf{Ổn định điện áp điều khiển} & Thấp (bị ảnh hưởng servo) & Cao \\
+            \hline
+            \textbf{Nguy cơ reset vi điều khiển} & Cao (sụt áp khi servo tải) & Thấp \\
+            \hline
+            \textbf{Độ phức tạp mạch} & Thấp & Trung bình (thêm DC-DC) \\
+            \hline
+            \textbf{Khối lượng} & Nhẹ hơn & Tăng nhẹ \\
+            \hline
+            \end{tabular}
+            \end{table}
+
+            \textbf{Kết luận:} Nhóm lựa chọn phương án \textbf{hai nguồn tách biệt}. Phương án một nguồn duy nhất bị loại vì khi nhiều servo đồng thời chịu tải, dòng tiêu thụ tổng có thể vượt 10 A, gây sụt áp đáng kể trên đường dây và trực tiếp làm mất ổn định điện áp cấp cho vi điều khiển, dẫn đến reset hoặc lỗi logic không mong muốn.
+        \subsection{Sơ đồ khối hệ thống điện}
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=1\textwidth, trim=0.1cm 0.1cm 0.1cm 0.1cm, clip]{pictures/ElectricalDiagram.pdf}                \caption{Sơ đồ khối hệ thống điện}
+                \label{fig:block_diagram}
+            \end{figure}
+
+    \section{Thiết kế khái quát cơ khí}
+                    

@@ -1,0 +1,130 @@
+\chapter{TÍNH KHẢ THI VÀ ĐỊNH RÕ VẤN ĐỀ}
+    \section{Định rõ vấn đề thiết kế}
+
+        \hspace{0.5cm} Dựa trên các nhu cầu thực tiễn đã được xác định ở Chương 1, vấn đề thiết kế được phát biểu cụ thể như sau:
+
+        \textit{"Thiết kế và chế tạo một robot nhện 6 chân (hexapod) có khả năng di chuyển ổn định trên địa hình phẳng, thực hiện các kiểu di chuyển cơ bản (tiến, lùi, xoay trái/phải, tránh vật cản), được điều khiển từ xa thông qua giao tiếp không dây, với chi phí chế tạo phù hợp với môi trường học thuật."}
+
+        Robot cần đáp ứng các yêu cầu chức năng cốt lõi sau:
+
+        \begin{itemize}
+            \item Di chuyển tiến, lùi, xoay trái, xoay phải trên mặt phẳng và có khả năng tránh vật cản.
+            \item Duy trì ổn định khi đứng yên và trong quá trình di chuyển.
+            \item Mỗi chân có 3 bậc tự do (DOF) tương ứng với 3 khớp: coxa, femur và tibia.
+            \item Toàn bộ 18 servo được điều khiển đồng bộ theo thuật toán dáng đi.
+            \item Hệ thống điều khiển có thể nhận lệnh từ xa qua Bluetooth hoặc WiFi.
+        \end{itemize}
+
+    \section{Phân tích tính khả thi}
+
+        \subsection{Tính khả thi kỹ thuật}
+
+        \hspace{0.5cm} Về mặt kỹ thuật, các công nghệ cần thiết để thực hiện đề tài đều đã được nghiên cứu và kiểm chứng rộng rãi trong cộng đồng học thuật và maker toàn cầu.
+
+        \textbf{Cơ cấu cơ khí:} Cấu hình hexapod với 3 khớp mỗi chân là cấu hình phổ biến nhất trong các nghiên cứu về robot nhện. Các chi tiết cơ khí có thể được gia công bằng in 3D (FDM) với vật liệu PLA/PETG, đảm bảo độ bền đủ dùng cho tải trọng robot cỡ nhỏ.
+
+        \textbf{Hệ thống dẫn động:} Servo động cơ RC loại MG996R và DS3218 đang được sử dụng phổ biến trong các dự án robot nhện nghiên cứu. Với moment xoắn từ 9--13 kgf.cm, các servo này đủ khả năng đáp ứng yêu cầu của robot có trọng lượng dưới 1.5 kg.
+
+        \textbf{Hệ thống điều khiển:} Vi điều khiển ESP32 kết hợp với module mở rộng PWM (PCA9685) có thể điều khiển đồng thời 16--32 kênh servo. Thuật toán động học nghịch (IK) cho chân 3-DOF có thể giải tích được bằng phương pháp hình học, không yêu cầu tài nguyên tính toán lớn.
+
+        \textbf{Giao tiếp không dây:} ESP32 giao tiếp với WebServer ReactJS thông qua WiFi để nhận lệnh điều khiển từ ứng dụng di động. Đây là giải pháp đã được nhiều dự án thực hiện thành công, đảm bảo tính ổn định và độ trễ thấp.
+
+        \subsection{Tính khả thi kinh tế}
+
+        \hspace{0.5cm} Bảng \ref{tab:cost_estimate} trình bày ước tính sơ bộ chi phí linh kiện cho một robot nhện 6 chân:
+
+        \begin{table}[h!]
+        \centering
+        \caption{Ước tính chi phí linh kiện}
+        \label{tab:cost_estimate}
+        \begin{tabular}{|l|c|c|r|}
+        \hline
+        \textbf{Hạng mục} & \textbf{Đơn vị} & \textbf{Số lượng} & \textbf{Ước tính (VNĐ)} \\
+        \hline
+        Servo MG996R & Cái & 18 & 1.440.000 \\
+        Vi điều khiển (ESP32) & Cái & 1 & 150.000 \\
+        Module PWM PCA9685 & Cái & 2 & 160.000 \\
+        Vật liệu in 3D (PLA 1kg) & Cuộn & 1--2 & 400.000 \\
+        Nguồn động lực (pin LiPo 3S 11.1V) & Cái & 1 & 300.000 \\
+        Nguồn điều khiển (Cell 7.4V 18650) & Cái & 1 & 150.000 \\
+        Cảm biến siêu âm (HC-SRF05) & Cái & 1 & 30.000 \\
+        \hline
+        \textbf{Tổng cộng (ước tính)} & & & \textbf{~2.530.000} \\
+        \hline
+        \end{tabular}
+        \end{table}
+
+        Mức chi phí này nằm trong ngân sách phù hợp cho một đề tài đồ án môn học cấp trường, không yêu cầu thiết bị công nghiệp đắt tiền.
+
+        \subsection{Tính khả thi về thời gian}
+
+        \hspace{0.5cm} Đề tài được thực hiện trong vòng một học kỳ (khoảng 15 tuần). Bảng \ref{tab:timeline} trình bày kế hoạch triển khai dự kiến:
+
+        \begin{table}[h!]
+        \centering
+        \caption{Kế hoạch triển khai dự kiến}
+        \label{tab:timeline}
+        \begin{tabular}{|c|l|}
+        \hline
+        \textbf{Tuần} & \textbf{Nội dung công việc} \\
+        \hline
+        1 -- 3 & Khảo sát tài liệu, xác định yêu cầu, chọn phương án thiết kế \\
+        4 -- 6 & Thiết kế cơ khí, xuất bản vẽ, tiến hành in 3D \\
+        7 -- 8 & Lắp ráp cơ khí, thiết kế và thi công mạch điện tử \\
+        9 -- 11 & Lập trình thuật toán IK và gait controller \\
+        12 -- 13 & Tích hợp hệ thống, thử nghiệm và hiệu chỉnh \\
+        14 -- 15 & Hoàn thiện sản phẩm, viết báo cáo và chuẩn bị bảo vệ \\
+        \hline
+        \end{tabular}
+        \end{table}
+
+    \section{Các ràng buộc và tiêu chí thiết kế}
+
+        \hspace{0.5cm} Để đảm bảo sản phẩm đáp ứng được mục tiêu đề ra đồng thời khả thi về mặt thực thi, nhóm xác định các ràng buộc và tiêu chí thiết kế cụ thể như sau:
+
+        \textbf{Ràng buộc kích thước và trọng lượng:}
+        \begin{itemize}
+            \item Chiều dài thân robot (không tính chân): không quá 25 cm.
+            \item Chiều rộng tổng thể khi chân mở: không quá 50 cm.
+            \item Tổng trọng lượng robot: dưới 1.5 kg để đảm bảo servo không bị quá tải.
+        \end{itemize}
+
+        \textbf{Ràng buộc dẫn động:}
+        \begin{itemize}
+            \item Sử dụng servo RC loại phổ biến, moment xoắn $\geq$ 9 kgf.cm.
+            \item Góc quay servo trong dải $0°$ đến $180°$; bộ điều khiển khai thác dải $\pm 60°$ quanh vị trí trung tính.
+        \end{itemize}
+
+        \textbf{Tiêu chí hiệu năng:}
+        \begin{itemize}
+            \item Tốc độ di chuyển tối thiểu: 5 cm/s trên mặt phẳng.
+            \item Thời gian hoạt động liên tục: $\geq$ 15 phút với pin LiPo 7.4V 2200 mAh.
+            \item Tần số cập nhật điều khiển servo: $\geq$ 50 Hz.
+        \end{itemize}
+
+        \textbf{Tiêu chí an toàn:}
+        \begin{itemize}
+            \item Mạch điện có cầu chì bảo vệ nguồn.
+            \item Phần mềm có cơ chế đặt servo về vị trí an toàn khi mất tín hiệu điều khiển.
+        \end{itemize}
+
+        \section{Xác định phạm vi đề tài}
+
+        \hspace{0.5cm} Để đảm bảo tính khả thi trong thời gian một học kỳ, nhóm xác định rõ phạm vi thực hiện như sau:
+
+        \textbf{Phạm vi thực hiện (In scope):}
+        \begin{itemize}
+            \item Thiết kế và chế tạo robot nhện 6 chân hoạt động được trên mặt phẳng.
+            \item Xây dựng thuật toán động học nghịch (IK) cho chân 3-DOF.
+            \item Triển khai thuật toán dáng đi tripod gait và wave gait.
+            \item Điều khiển robot từ xa qua Bluetooth bằng ứng dụng di động.
+            \item Kiểm tra và đánh giá hiệu năng robot trong điều kiện thực nghiệm.
+        \end{itemize}
+
+        \textbf{Ngoài phạm vi (Out of scope):}
+        \begin{itemize}
+            \item Điều hướng tự động và tránh vật cản (autonomous navigation).
+            \item Di chuyển trên địa hình phức tạp (dốc, đá lởm chởm).
+            \item Tích hợp cảm biến IMU để bù nghiêng thân robot.
+            \item Tối ưu hóa tiêu thụ năng lượng.
+        \end{itemize}

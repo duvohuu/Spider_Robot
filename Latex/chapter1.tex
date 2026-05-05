@@ -1,6 +1,42 @@
-\chapter{CHUƠNG 1}
-\section{Section 1}
-This is the content of chapter 1, section 1.
-\newpage
-\section{Section 2}
-This is the content of chapter 1, section 2.
+\chapter{NHẬN BIẾT NHU CẦU}
+
+\section{Bối cảnh và vấn đề đặt ra}
+
+\hspace{0.5cm} Trong bối cảnh cuộc cách mạng công nghiệp 4.0 đang diễn ra mạnh mẽ, robot học ngày càng đóng vai trò quan trọng trong nhiều lĩnh vực của đời sống và sản xuất. Đặc biệt, nhu cầu về các hệ thống robot có khả năng di chuyển linh hoạt trên nhiều loại địa hình đang ngày càng trở nên cấp thiết trong các lĩnh vực như thăm dò, cứu hộ, giám sát môi trường và công nghiệp.
+
+Hiện nay, phần lớn các robot di động thương mại sử dụng cơ cấu di chuyển bằng bánh xe hoặc dải xích. Tuy nhiên, các cơ cấu này tỏ ra kém hiệu quả trên địa hình gồ ghề, không bằng phẳng, hoặc trong không gian chật hẹp có nhiều chướng ngại vật. Địa hình tự nhiên như rừng núi, đống đổ nát sau thảm họa, hay hầm lò khai thác khoáng sản đặt ra những thách thức lớn mà robot bánh xe truyền thống khó có thể vượt qua.
+
+Trước thực tế đó, robot chân nhiều bậc tự do — đặc biệt là robot nhện (spider robot) — nổi lên như một giải pháp đầy tiềm năng. Lấy cảm hứng từ cấu trúc sinh học của các loài côn trùng và nhện, loại robot này sở hữu khả năng thăng bằng và thích nghi địa hình vượt trội, có thể bước qua chướng ngại vật, leo dốc và duy trì ổn định ngay cả khi một số chân bị mất chức năng.
+
+Tuy nhiên, việc thiết kế và chế tạo một robot nhện hoàn chỉnh đòi hỏi sự tích hợp đồng thời giữa nhiều lĩnh vực: cơ khí, điện tử, điều khiển tự động và lập trình nhúng. Đây chính là bài toán điển hình của ngành thiết kế hệ thống cơ điện tử (Mechatronics), đặt ra thách thức về cả lý thuyết lẫn thực tiễn cho nhóm nghiên cứu.
+
+\section{Nhu cầu thực tiễn cần đáp ứng}
+
+\hspace{0.5cm} Xuất phát từ những hạn chế của robot di động truyền thống, có thể xác định các nhu cầu thực tiễn cụ thể mà một robot nhện cần đáp ứng:
+
+\begin{itemize}
+    \item \textbf{Khả năng di chuyển đa địa hình:} Robot cần có thể di chuyển ổn định trên nền phẳng, mặt dốc, và địa hình không đều. Điều này đòi hỏi hệ thống chân có nhiều bậc tự do, cho phép mỗi chân điều chỉnh độc lập theo bề mặt tiếp xúc.
+
+    \item \textbf{Tính ổn định trong chuyển động:} Robot cần duy trì trọng tâm ổn định trong suốt quá trình di chuyển. Với cấu hình 6 chân (hexapod), robot có thể sử dụng thuật toán dáng đi tam giác (tripod gait), đảm bảo luôn có ít nhất 3 chân tiếp đất tại mọi thời điểm.
+
+    \item \textbf{Điều khiển linh hoạt và đáp ứng thời gian thực:} Hệ thống điều khiển cần đủ mạnh để tính toán động học nghịch (inverse kinematics) và đồng bộ điều khiển toàn bộ các khớp servo trong thời gian thực, đảm bảo chuyển động mượt mà.
+
+    \item \textbf{Chi phí chế tạo hợp lý:} Trong môi trường học thuật, sản phẩm cần được thiết kế với chi phí phù hợp, ưu tiên các linh kiện sẵn có trên thị trường Việt Nam như servo MG996R, vi điều khiển Arduino/STM32, và kết cấu cơ khí in 3D hoặc cắt laser.
+
+    \item \textbf{Nền tảng nghiên cứu và giáo dục:} Robot nhện là nền tảng thực hành lý tưởng để sinh viên tích hợp kiến thức từ các môn học: cơ học, điện tử, lập trình nhúng và tự động hóa — phù hợp với mục tiêu đào tạo kỹ sư cơ điện tử tại Trường Đại học Bách Khoa TP.HCM.
+\end{itemize}
+
+\section{Lý do chọn đề tài}
+
+\hspace{0.5cm} Nhóm quyết định lựa chọn đề tài \textbf{"Thiết kế và chế tạo robot nhện 6 chân"} dựa trên các lý do sau:
+
+\textbf{Tính hội tụ kiến thức cơ điện tử:} Robot nhện là sản phẩm tích hợp điển hình của ngành Cơ Điện Tử. Quá trình thực hiện đề tài yêu cầu nhóm vận dụng đồng thời kiến thức về thiết kế cơ khí (động học, phân tích lực), điện tử (mạch điều khiển, driver servo), lập trình nhúng (thuật toán IK, gait controller) và truyền thông không dây — từ đó giúp củng cố và phát triển năng lực kỹ thuật toàn diện.
+
+\textbf{Tính thực tiễn và ứng dụng cao:} Robot chân nhiều bậc tự do đang được nghiên cứu rộng rãi trên thế giới với các ứng dụng trong quân sự, tìm kiếm cứu nạn, kiểm tra đường ống và thám hiểm không gian. Đây là lĩnh vực có giá trị nghiên cứu lâu dài, không chỉ dừng lại ở phạm vi bài tập lớn.
+
+\textbf{Khả năng thực thi trong điều kiện hiện có:} Với nguồn lực sẵn có trong môi trường đại học — máy in 3D, các linh kiện phổ biến trên thị trường — nhóm có thể hoàn thành một sản phẩm thực hoạt động được trong thời gian một học kỳ.
+
+\textbf{Giá trị học thuật và sáng tạo:} Đề tài đòi hỏi không chỉ lắp ráp mà còn phải giải quyết các bài toán kỹ thuật thực sự: tối ưu hóa cấu hình chân, hiệu chỉnh thuật toán dáng đi, thiết kế mạch điều khiển phân tán — tạo ra không gian sáng tạo và đóng góp kỹ thuật có chiều sâu.
+
+
+                

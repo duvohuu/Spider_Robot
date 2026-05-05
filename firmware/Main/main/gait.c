@@ -7,8 +7,8 @@
 #include <math.h>
 
 // ── Tham số gait ────────────────────────────────────────────
-#define STEP_X    30.0f
-#define LIFT_Z    25.0f
+#define STEP_X    15.0f
+#define LIFT_Z    15.0f
 
 #define FOOT_FWD_X  (STAND_X + STEP_X)
 #define FOOT_BWD_X  (STAND_X - STEP_X)
@@ -48,23 +48,24 @@ static void set_leg(uint8_t pca, uint8_t cx_ch, uint8_t fm_ch, uint8_t tb_ch,
 
     servo_angle(pca, cx_ch, 90.0f + cx_dir * ik.coxa_deg  + cx_off);
     servo_angle(pca, fm_ch, 90.0f + fm_dir * ik.femur_deg + fm_off);
-    servo_angle(pca, tb_ch, 90.0f + tb_dir * (ik.tibia_deg - 90.0f) + tb_off);
-}
+    servo_angle(pca, tb_ch, 90.0f - tb_dir * (ik.femur_deg + ik.tibia_deg) + tb_off);}
 
 // ── LEG macros ───────────────────────────────────────────────
+// Chân TRÁI: tb_dir đổi -1 → +1
 #define LEG_LF(x,y,z) set_leg(PCA_L,LF_COXA_CH,LF_FEMUR_CH,LF_TIBIA_CH, \
-    LF_MOUNT_DEG,-1,-1,-1, LF_CX_OFFSET,LF_FM_OFFSET,LF_TB_OFFSET,x,y,z)
+    LF_MOUNT_DEG,+1,+1,+1, LF_CX_OFFSET,LF_FM_OFFSET,LF_TB_OFFSET,x,y,z)
 #define LEG_LM(x,y,z) set_leg(PCA_L,LM_COXA_CH,LM_FEMUR_CH,LM_TIBIA_CH, \
-    LM_MOUNT_DEG,-1,-1,-1, LM_CX_OFFSET,LM_FM_OFFSET,LM_TB_OFFSET,x,y,z)
+    LM_MOUNT_DEG,+1,+1,+1, LM_CX_OFFSET,LM_FM_OFFSET,LM_TB_OFFSET,x,y,z)
 #define LEG_LB(x,y,z) set_leg(PCA_L,LB_COXA_CH,LB_FEMUR_CH,LB_TIBIA_CH, \
-    LB_MOUNT_DEG,-1,-1,-1, LB_CX_OFFSET,LB_FM_OFFSET,LB_TB_OFFSET,x,y,z)
-#define LEG_RF(x,y,z) set_leg(PCA_R,RF_COXA_CH,RF_FEMUR_CH,RF_TIBIA_CH, \
-    RF_MOUNT_DEG,+1,+1,+1, RF_CX_OFFSET,RF_FM_OFFSET,RF_TB_OFFSET,x,y,z)
-#define LEG_RM(x,y,z) set_leg(PCA_R,RM_COXA_CH,RM_FEMUR_CH,RM_TIBIA_CH, \
-    RM_MOUNT_DEG,+1,+1,+1, RM_CX_OFFSET,RM_FM_OFFSET,RM_TB_OFFSET,x,y,z)
-#define LEG_RB(x,y,z) set_leg(PCA_R,RB_COXA_CH,RB_FEMUR_CH,RB_TIBIA_CH, \
-    RB_MOUNT_DEG,+1,+1,+1, RB_CX_OFFSET,RB_FM_OFFSET,RB_TB_OFFSET,x,y,z)
+    LB_MOUNT_DEG,+1,+1,+1, LB_CX_OFFSET,LB_FM_OFFSET,LB_TB_OFFSET,x,y,z)
 
+// Chân PHẢI: tb_dir đổi +1 → -1
+#define LEG_RF(x,y,z) set_leg(PCA_R,RF_COXA_CH,RF_FEMUR_CH,RF_TIBIA_CH, \
+    RF_MOUNT_DEG,+1,-1,-1, RF_CX_OFFSET,RF_FM_OFFSET,RF_TB_OFFSET,x,y,z)
+#define LEG_RM(x,y,z) set_leg(PCA_R,RM_COXA_CH,RM_FEMUR_CH,RM_TIBIA_CH, \
+    RM_MOUNT_DEG,+1,-1,-1, RM_CX_OFFSET,RM_FM_OFFSET,RM_TB_OFFSET,x,y,z)
+#define LEG_RB(x,y,z) set_leg(PCA_R,RB_COXA_CH,RB_FEMUR_CH,RB_TIBIA_CH, \
+    RB_MOUNT_DEG,+1,-1,-1, RB_CX_OFFSET,RB_FM_OFFSET,RB_TB_OFFSET,x,y,z)
 // ── Gait functions ───────────────────────────────────────────
 void calibration(void)
 {
@@ -93,41 +94,67 @@ void tripod_init(void)
 
 void tripod_step(void)
 {
-    // Nửa bước 1: A swing FWD, B stance FWD→BWD
+    // ── Nửa bước 1: A swing FWD, B stance FWD→BWD ──
+
+    // B stance: di chuyển nhỏ dần về BWD TRƯỚC khi nhấc A
+    LEG_RF(RF_BX, RF_BY, FOOT_GND_Z);
+    LEG_LM(LM_BX, LM_BY, FOOT_GND_Z);
+    LEG_RB(RB_BX, RB_BY, FOOT_GND_Z);
+    vTaskDelay(pdMS_TO_TICKS(80));
+
+    // Nhấc A
     LEG_LF(LF_BX - STEP_X, LF_BY, FOOT_AIR_Z);
     LEG_RM(RM_BX - STEP_X, RM_BY, FOOT_AIR_Z);
     LEG_LB(LB_BX - STEP_X, LB_BY, FOOT_AIR_Z);
     vTaskDelay(pdMS_TO_TICKS(T_LIFT_MS));
 
+    // A swing FWD (trên không)
     LEG_LF(LF_BX + STEP_X, LF_BY, FOOT_AIR_Z);
     LEG_RM(RM_BX + STEP_X, RM_BY, FOOT_AIR_Z);
     LEG_LB(LB_BX + STEP_X, LB_BY, FOOT_AIR_Z);
-    LEG_RF(RF_BX - STEP_X, RF_BY, FOOT_GND_Z);
-    LEG_LM(LM_BX - STEP_X, LM_BY, FOOT_GND_Z);
-    LEG_RB(RB_BX - STEP_X, RB_BY, FOOT_GND_Z);
     vTaskDelay(pdMS_TO_TICKS(T_SWING_MS));
 
+    // Hạ A
     LEG_LF(LF_BX + STEP_X, LF_BY, FOOT_GND_Z);
     LEG_RM(RM_BX + STEP_X, RM_BY, FOOT_GND_Z);
     LEG_LB(LB_BX + STEP_X, LB_BY, FOOT_GND_Z);
     vTaskDelay(pdMS_TO_TICKS(T_DOWN_MS));
 
-    // Nửa bước 2: B swing FWD, A stance FWD→BWD
+    // B stance về BWD SAU khi A đã chạm đất
+    LEG_RF(RF_BX - STEP_X, RF_BY, FOOT_GND_Z);
+    LEG_LM(LM_BX - STEP_X, LM_BY, FOOT_GND_Z);
+    LEG_RB(RB_BX - STEP_X, RB_BY, FOOT_GND_Z);
+    vTaskDelay(pdMS_TO_TICKS(80));
+
+    // ── Nửa bước 2: B swing FWD, A stance FWD→BWD ──
+
+    // A stance: về neutral trước
+    LEG_LF(LF_BX, LF_BY, FOOT_GND_Z);
+    LEG_RM(RM_BX, RM_BY, FOOT_GND_Z);
+    LEG_LB(LB_BX, LB_BY, FOOT_GND_Z);
+    vTaskDelay(pdMS_TO_TICKS(80));
+
+    // Nhấc B
     LEG_RF(RF_BX - STEP_X, RF_BY, FOOT_AIR_Z);
     LEG_LM(LM_BX - STEP_X, LM_BY, FOOT_AIR_Z);
     LEG_RB(RB_BX - STEP_X, RB_BY, FOOT_AIR_Z);
     vTaskDelay(pdMS_TO_TICKS(T_LIFT_MS));
 
+    // B swing FWD (trên không)
     LEG_RF(RF_BX + STEP_X, RF_BY, FOOT_AIR_Z);
     LEG_LM(LM_BX + STEP_X, LM_BY, FOOT_AIR_Z);
     LEG_RB(RB_BX + STEP_X, RB_BY, FOOT_AIR_Z);
-    LEG_LF(LF_BX - STEP_X, LF_BY, FOOT_GND_Z);
-    LEG_RM(RM_BX - STEP_X, RM_BY, FOOT_GND_Z);
-    LEG_LB(LB_BX - STEP_X, LB_BY, FOOT_GND_Z);
     vTaskDelay(pdMS_TO_TICKS(T_SWING_MS));
 
+    // Hạ B
     LEG_RF(RF_BX + STEP_X, RF_BY, FOOT_GND_Z);
     LEG_LM(LM_BX + STEP_X, LM_BY, FOOT_GND_Z);
     LEG_RB(RB_BX + STEP_X, RB_BY, FOOT_GND_Z);
     vTaskDelay(pdMS_TO_TICKS(T_DOWN_MS));
+
+    // A stance về BWD
+    LEG_LF(LF_BX - STEP_X, LF_BY, FOOT_GND_Z);
+    LEG_RM(RM_BX - STEP_X, RM_BY, FOOT_GND_Z);
+    LEG_LB(LB_BX - STEP_X, LB_BY, FOOT_GND_Z);
+    vTaskDelay(pdMS_TO_TICKS(80));
 }
