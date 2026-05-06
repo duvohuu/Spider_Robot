@@ -1,4 +1,5 @@
 #pragma once
+#include "utils.h"
 
 // ============================================================
 //  PCA9685 Channel Map
@@ -54,15 +55,15 @@
 #define LB_FM_OFFSET  0.0f
 #define LB_TB_OFFSET  0.0f
 
-#define RF_CX_OFFSET  0.0f
+#define RF_CX_OFFSET  2.0f
 #define RF_FM_OFFSET  0.0f
 #define RF_TB_OFFSET  0.0f
 
-#define RM_CX_OFFSET  0.0f
+#define RM_CX_OFFSET  2.0f
 #define RM_FM_OFFSET  0.0f
 #define RM_TB_OFFSET  0.0f
 
-#define RB_CX_OFFSET  0.0f
+#define RB_CX_OFFSET  2.0f
 #define RB_FM_OFFSET  0.0f
 #define RB_TB_OFFSET  0.0f
 
@@ -76,13 +77,6 @@
 // ============================================================
 //  Tư thế đứng
 // ============================================================
-#define STAND_Z  60.0f
-#define STAND_X  130.0f
+#define STAND_Z  120.0f
+#define STAND_X  50.0f
 
-// ============================================================
-//  Utility macros
-// ============================================================
-#include <math.h>
-#define DEG2RAD(d)     ((d) * (float)M_PI / 180.0f)
-#define RAD2DEG(r)     ((r) * 180.0f / (float)M_PI)
-#define CLAMP(v,lo,hi) ((v)<(lo)?(lo):((v)>(hi)?(hi):(v)))

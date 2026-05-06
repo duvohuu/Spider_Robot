@@ -8,7 +8,7 @@
 
 // ── Tham số gait ────────────────────────────────────────────
 #define STEP_X    15.0f
-#define LIFT_Z    15.0f
+#define LIFT_Z    50.0f
 
 #define FOOT_FWD_X  (STAND_X + STEP_X)
 #define FOOT_BWD_X  (STAND_X - STEP_X)
@@ -48,10 +48,8 @@ static void set_leg(uint8_t pca, uint8_t cx_ch, uint8_t fm_ch, uint8_t tb_ch,
 
     servo_angle(pca, cx_ch, 90.0f + cx_dir * ik.coxa_deg  + cx_off);
     servo_angle(pca, fm_ch, 90.0f + fm_dir * ik.femur_deg + fm_off);
-    servo_angle(pca, tb_ch, 90.0f - tb_dir * (ik.femur_deg + ik.tibia_deg) + tb_off);}
-
+    servo_angle(pca, tb_ch, 90.0f - tb_dir * (ik.tibia_deg - 90.0f) + tb_off);}
 // ── LEG macros ───────────────────────────────────────────────
-// Chân TRÁI: tb_dir đổi -1 → +1
 #define LEG_LF(x,y,z) set_leg(PCA_L,LF_COXA_CH,LF_FEMUR_CH,LF_TIBIA_CH, \
     LF_MOUNT_DEG,+1,+1,+1, LF_CX_OFFSET,LF_FM_OFFSET,LF_TB_OFFSET,x,y,z)
 #define LEG_LM(x,y,z) set_leg(PCA_L,LM_COXA_CH,LM_FEMUR_CH,LM_TIBIA_CH, \
@@ -59,7 +57,6 @@ static void set_leg(uint8_t pca, uint8_t cx_ch, uint8_t fm_ch, uint8_t tb_ch,
 #define LEG_LB(x,y,z) set_leg(PCA_L,LB_COXA_CH,LB_FEMUR_CH,LB_TIBIA_CH, \
     LB_MOUNT_DEG,+1,+1,+1, LB_CX_OFFSET,LB_FM_OFFSET,LB_TB_OFFSET,x,y,z)
 
-// Chân PHẢI: tb_dir đổi +1 → -1
 #define LEG_RF(x,y,z) set_leg(PCA_R,RF_COXA_CH,RF_FEMUR_CH,RF_TIBIA_CH, \
     RF_MOUNT_DEG,+1,-1,-1, RF_CX_OFFSET,RF_FM_OFFSET,RF_TB_OFFSET,x,y,z)
 #define LEG_RM(x,y,z) set_leg(PCA_R,RM_COXA_CH,RM_FEMUR_CH,RM_TIBIA_CH, \
@@ -157,4 +154,49 @@ void tripod_step(void)
     LEG_RM(RM_BX - STEP_X, RM_BY, FOOT_GND_Z);
     LEG_LB(LB_BX - STEP_X, LB_BY, FOOT_GND_Z);
     vTaskDelay(pdMS_TO_TICKS(80));
+}
+
+// Thêm tạm vào main.c hoặc calibration() để test
+void test_tibia_mechanical(void)
+{
+    // Gửi 90° cho tất cả tibia → servo ở vị trí giữa
+    // Quan sát xem tibia trái và phải có cùng góc vật lý không
+    // servo_angle(PCA_L, LF_TIBIA_CH, 90.0f);
+    // servo_angle(PCA_L, LM_TIBIA_CH, 90.0f);
+    // servo_angle(PCA_L, LB_TIBIA_CH, 90.0f);
+    // servo_angle(PCA_R, RF_TIBIA_CH, 90.0f);
+    // servo_angle(PCA_R, RM_TIBIA_CH, 90.0f);
+    // servo_angle(PCA_R, RB_TIBIA_CH, 90.0f);
+    // vTaskDelay(pdMS_TO_TICKS(3000));
+
+    // Gửi 0° → servo hết hành trình một chiều
+    servo_angle(PCA_L, LF_TIBIA_CH, 0.0f);
+    // servo_angle(PCA_L, LM_TIBIA_CH, 0.0f);
+    // servo_angle(PCA_L, LB_TIBIA_CH, 0.0f);
+    // servo_angle(PCA_R, RF_TIBIA_CH, 180.0f);
+    servo_angle(PCA_R, RM_TIBIA_CH, 180.0f);
+    // servo_angle(PCA_R, RB_TIBIA_CH, 170.0f);
+    vTaskDelay(pdMS_TO_TICKS(3000));
+
+    // Gửi 180° → servo hết hành trình chiều kia
+    servo_angle(PCA_L, LF_TIBIA_CH, 180.0f);
+    // servo_angle(PCA_L, LM_TIBIA_CH, 180.0f);
+    // servo_angle(PCA_L, LB_TIBIA_CH, 180.0f);
+    // servo_angle(PCA_R, RF_TIBIA_CH, 0.0f);
+    servo_angle(PCA_R, RM_TIBIA_CH, 0.0f);
+    // servo_angle(PCA_R, RB_TIBIA_CH, 0.0f);
+    vTaskDelay(pdMS_TO_TICKS(3000));
+}
+
+void test_femur(void)
+{
+    // Femur tư thế đứng
+    servo_angle(PCA_L, LM_FEMUR_CH, 90.0f);
+    servo_angle(PCA_R, RM_FEMUR_CH, 90.0f);
+    vTaskDelay(pdMS_TO_TICKS(2000));
+
+    // Femur nhấc chân (servo giảm ~28° với fm_dir=+1 bên trái)
+    servo_angle(PCA_L, LM_FEMUR_CH, 62.0f);   // 90-28
+    servo_angle(PCA_R, RM_FEMUR_CH, 118.0f);  // 90+28
+    vTaskDelay(pdMS_TO_TICKS(2000));
 }

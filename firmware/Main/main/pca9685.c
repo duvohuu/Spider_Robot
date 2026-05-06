@@ -1,13 +1,11 @@
 #include "pca9685.h"
-#include "leg_config.h"
+#include "board_config.h"
+#include "utils.h"
 #include "driver/i2c.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 #define I2C_MASTER_NUM  I2C_NUM_0
-#define I2C_MASTER_SDA  21
-#define I2C_MASTER_SCL  22
-#define I2C_FREQ        400000
 
 #define MODE1      0x00
 #define PRESCALE   0xFE
@@ -21,7 +19,7 @@ void i2c_master_init(void)
         .scl_io_num       = I2C_MASTER_SCL,
         .sda_pullup_en    = GPIO_PULLUP_ENABLE,
         .scl_pullup_en    = GPIO_PULLUP_ENABLE,
-        .master.clk_speed = I2C_FREQ
+        .master.clk_speed = I2C_MASTER_FREQ
     };
     i2c_param_config(I2C_MASTER_NUM, &conf);
     i2c_driver_install(I2C_MASTER_NUM, conf.mode, 0, 0, 0);

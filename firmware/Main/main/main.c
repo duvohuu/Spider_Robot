@@ -8,9 +8,12 @@ void app_main(void)
     pca_init(PCA_R);
 
     calibration();
-    // tripod_init();
+    tripod_init();
 
     while (1) {
-        // tripod_step();
+        tripod_step();
+        // test_tibia_mechanical();
+        // test_femur();
+
     }
 }
