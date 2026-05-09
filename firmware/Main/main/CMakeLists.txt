@@ -1,2 +1,18 @@
-idf_component_register(SRCS "gait.c" "ik.c" "pca9685.c" "main.c"
-                    INCLUDE_DIRS ".")
+idf_component_register(
+    SRCS
+        "gait.c"
+        "ik.c"
+        "pca9685.c"
+        "wifi_server.c"
+        "main.c"
+    INCLUDE_DIRS "."
+    REQUIRES
+        esp_wifi
+        esp_netif
+        esp_event
+        esp_http_server
+        nvs_flash
+        json
+        driver
+        freertos
+)

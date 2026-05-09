@@ -78,5 +78,7 @@
 //  Tư thế đứng
 // ============================================================
 #define STAND_Z  120.0f
-#define STAND_X  50.0f
+// STAND_X = L1 + sqrt(L2^2 - (STAND_Z - L3)^2) = 60.5 + 110.07 ≈ 170mm
+// → tibia thẳng đứng ở tư thế đứng, femur nghiêng ~23.5° xuống dưới
+#define STAND_X  170.0f
 
