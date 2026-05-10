@@ -55,15 +55,15 @@
 #define LB_FM_OFFSET  0.0f
 #define LB_TB_OFFSET  0.0f
 
-#define RF_CX_OFFSET  2.0f
+#define RF_CX_OFFSET  0.0f
 #define RF_FM_OFFSET  0.0f
 #define RF_TB_OFFSET  0.0f
 
-#define RM_CX_OFFSET  2.0f
+#define RM_CX_OFFSET  0.0f
 #define RM_FM_OFFSET  0.0f
 #define RM_TB_OFFSET  0.0f
 
-#define RB_CX_OFFSET  2.0f
+#define RB_CX_OFFSET  0.0f
 #define RB_FM_OFFSET  0.0f
 #define RB_TB_OFFSET  0.0f
 
@@ -75,10 +75,8 @@
 #define L3  167.8f
 
 // ============================================================
-//  Tư thế đứng
+//  Tư thế đứng khởi tạo
 // ============================================================
 #define STAND_Z  120.0f
-// STAND_X = L1 + sqrt(L2^2 - (STAND_Z - L3)^2) = 60.5 + 110.07 ≈ 170mm
-// → tibia thẳng đứng ở tư thế đứng, femur nghiêng ~23.5° xuống dưới
 #define STAND_X  170.0f
 

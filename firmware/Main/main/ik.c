@@ -2,19 +2,6 @@
 #include "leg_config.h"
 #include <math.h>
 
-Vec3 forward_kinematics(float coxa_deg, float femur_deg, float tibia_deg)
-{
-    float t1 = DEG2RAD(coxa_deg);
-    float t2 = DEG2RAD(femur_deg);
-    float t3 = DEG2RAD(tibia_deg);
-    float reach = L1 + L2 * cosf(t2) + L3 * cosf(t2 + t3);
-    Vec3 p;
-    p.x = reach * cosf(t1);
-    p.y = reach * sinf(t1);
-    p.z = L2 * sinf(t2) + L3 * sinf(t2 + t3);
-    return p;
-}
-
 IKResult inverse_kinematics(float x, float y, float z)
 {
     IKResult r = {0};
