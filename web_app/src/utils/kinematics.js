@@ -20,20 +20,25 @@ export function forwardKinematics(coxaDeg, femurDeg, tibiaDeg) {
 }
 
 /**
- * Inverse kinematics — tibia always vertical (perpendicular to ground)
- * femurDeg: driven by Z only  (sin(t2) = (z - L3) / L2)
- * tibiaDeg: 90° - femurDeg    (keeps tibia vertical, exactly)
- * L2 constraint always satisfied.
+ * Inverse kinematics — law of cosines, matches firmware ik.c exactly.
+ * Input: foot position in leg-local frame (x forward, y left, z up)
  */
 export function inverseKinematics(x, y, z) {
   const coxaDeg = RAD2DEG(Math.atan2(y, x))
-  const sin_t2 = (z - L3) / L2
-  if (sin_t2 < -1 || sin_t2 > 1) {
+  const horiz = Math.sqrt(x * x + y * y) - L1
+  const D = Math.sqrt(horiz * horiz + z * z)
+
+  if (D > L2 + L3 || D < Math.abs(L2 - L3) || D < 1e-3) {
     return { coxaDeg: 0, femurDeg: 0, tibiaDeg: 0, valid: false }
   }
-  const femurDeg = RAD2DEG(Math.asin(sin_t2))
-  const tibiaDeg = 90 - femurDeg
-  return { coxaDeg, femurDeg, tibiaDeg, valid: true }
+
+  const cos_t3 = clamp((D * D - L2 * L2 - L3 * L3) / (2 * L2 * L3), -1, 1)
+  const t3 = Math.acos(cos_t3)
+  const alpha = Math.atan2(z, horiz)
+  const beta = Math.atan2(L3 * Math.sin(t3), L2 + L3 * Math.cos(t3))
+  const t2 = alpha - beta
+
+  return { coxaDeg, femurDeg: RAD2DEG(t2), tibiaDeg: RAD2DEG(t3), valid: true }
 }
 
 /**

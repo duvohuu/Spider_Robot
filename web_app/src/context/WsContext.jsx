@@ -8,6 +8,7 @@ const WsProvider = ({ children }) => {
     const [robotState, setRobotState] = useState('idle'); // 'idle' | 'running'
     const [feetData, setFeetData] = useState(null);
     const [latency, setLatency] = useState(null);
+    const [distCm, setDistCm] = useState(null);  // khoảng cách SRF05 (cm), null nếu chưa có
     const [url, setUrl] = useState('ws://192.168.4.1/ws');
     const pingTs = useRef(null);
 
@@ -26,6 +27,7 @@ const WsProvider = ({ children }) => {
         socket.onclose = () => {
             setConnected(false);
             setRobotState('idle');
+            setDistCm(null);
         };
 
         socket.onerror = () => {
@@ -50,6 +52,7 @@ const WsProvider = ({ children }) => {
                         }
                     }, 2000);
                 }
+                if (msg.dist_cm !== undefined) setDistCm(msg.dist_cm);
             } catch { /* ignore non-JSON */ }
         };
 
@@ -74,7 +77,7 @@ const WsProvider = ({ children }) => {
 
     return (
         <WsContext.Provider value={{
-            connected, robotState, feetData, latency,
+            connected, robotState, feetData, latency, distCm,
             url, setUrl,
             connect, disconnect, send,
         }}>

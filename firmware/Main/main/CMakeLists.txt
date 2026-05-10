@@ -4,6 +4,7 @@ idf_component_register(
         "ik.c"
         "pca9685.c"
         "wifi_server.c"
+        "srf05.c"
         "main.c"
     INCLUDE_DIRS "."
     REQUIRES

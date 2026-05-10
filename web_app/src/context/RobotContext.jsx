@@ -43,10 +43,6 @@ const computeAngles = (footPositions, offsets) => {
 
 // ── Gait animation constants (mirrors firmware) ──────────────
 const STAND_POSE_BASE = computeStandPose(); // fixed reference base positions
-const GAIT_STEP_X  = 15;    // mm — same as firmware STEP_X
-const GAIT_LIFT_Z  = 30;    // mm — same as firmware LIFT_Z
-const GAIT_PERIOD  = 1200;  // ms — full cycle
-const SWING_FRAC   = 0.38;  // fraction of cycle for swing phase
 // Tripod groups: A={LF,RM,LB} phase=0.0,  B={RF,LM,RB} phase=0.5
 const LEG_PHASE = { LF: 0.0, RM: 0.0, LB: 0.0, RF: 0.5, LM: 0.5, RB: 0.5 };
 
@@ -65,6 +61,10 @@ const RobotProvider = ({ children }) => {
     // Sync bodyHeight vào ref để RAF closure dùng được mà không stale
     const bodyHeightRef = useRef(STAND_Z);
     useEffect(() => { bodyHeightRef.current = bodyHeight; }, [bodyHeight]);
+
+    // Sync gait vào ref để RAF closure đọc params mới nhất
+    const gaitRef = useRef(DEFAULT_GAIT);
+    useEffect(() => { gaitRef.current = gait; }, [gait]);
 
     // Mode: 'gait' | 'pose'
     const [controlMode, setControlModeState] = useState('gait');
@@ -107,22 +107,26 @@ const RobotProvider = ({ children }) => {
         let rafId;
         const startTime = performance.now();
         const animate = () => {
-            const t = ((performance.now() - startTime) % GAIT_PERIOD) / GAIT_PERIOD;
+            const g = gaitRef.current;
+            // Full cycle ≈ 4 * 80ms (pause delays) + 2 * (tLift + tSwing + tDown)
+            const period = 320 + 2 * (g.tLiftMs + g.tSwingMs + g.tDownMs);
+            const swingFrac = (g.tLiftMs + g.tSwingMs + g.tDownMs) / period;
+            const t = ((performance.now() - startTime) % period) / period;
             const h = bodyHeightRef.current;
             const np = {};
             LEGS.forEach(({ id }) => {
                 const base = STAND_POSE_BASE[id];
                 const ph   = (t + LEG_PHASE[id]) % 1.0;
                 let dx = 0, dz = 0;
-                if (ph < SWING_FRAC) {
+                if (ph < swingFrac) {
                     // Swing: nhấc chân và đưa ra trước
-                    const s = ph / SWING_FRAC;
-                    dx = GAIT_STEP_X * (2 * s - 1);
-                    dz = -GAIT_LIFT_Z * Math.sin(s * Math.PI);
+                    const s = ph / swingFrac;
+                    dx = g.stepX * (2 * s - 1);
+                    dz = -g.liftZ * Math.sin(s * Math.PI);
                 } else {
                     // Stance: đẩy chân về sau (thân tiến lên)
-                    const s = (ph - SWING_FRAC) / (1 - SWING_FRAC);
-                    dx = GAIT_STEP_X * (1 - 2 * s);
+                    const s = (ph - swingFrac) / (1 - swingFrac);
+                    dx = g.stepX * (1 - 2 * s);
                 }
                 np[id] = { x: base.x + dx, y: base.y, z: h + dz };
             });

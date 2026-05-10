@@ -10,8 +10,16 @@ import StopIcon from '@mui/icons-material/Stop';
 import { useWs } from '../../context/WsContext';
 import { useRobot } from '../../context/RobotContext';
 
+// Màu khoảng cách theo ngưỡng obstacle avoidance (khớp firmware)
+const distColor = (cm) => {
+    if (cm === null) return '#3a6070';
+    if (cm < 12) return '#ff2d78';   // OBS_STOP_CM
+    if (cm < 25) return '#ffab40';   // OBS_WARN_CM
+    return '#00e676';
+};
+
 const TopBar = () => {
-    const { connected, robotState, latency, url, setUrl, connect, disconnect, send } = useWs();
+    const { connected, robotState, latency, distCm, url, setUrl, connect, disconnect, send } = useWs();
     const { animating, setAnimating, gait, controlMode } = useRobot();
 
     // ==================== HANDLERS ====================
@@ -147,6 +155,22 @@ const TopBar = () => {
                         </Typography>
                     </Box>
                 )}
+
+                {/* Distance (SRF05) */}
+                <Tooltip title="Obstacle distance (SRF05)">
+                    <Box sx={{
+                        px: 1, py: 0.3, bgcolor: '#05141f',
+                        border: `1px solid ${distColor(distCm)}40`,
+                        borderRadius: 1, flexShrink: 0,
+                        boxShadow: distCm !== null && distCm < 12 ? `0 0 8px ${distColor(distCm)}40` : 'none',
+                        transition: 'border-color 0.3s, box-shadow 0.3s',
+                    }}>
+                        <Typography sx={{ color: distColor(distCm), fontFamily: 'monospace', fontSize: 12, whiteSpace: 'nowrap', transition: 'color 0.3s' }}>
+                            {distCm !== null ? distCm.toFixed(1) : '--'}
+                            <Typography component="span" sx={{ fontSize: 10, color: '#3a6070', ml: 0.4 }}>cm</Typography>
+                        </Typography>
+                    </Box>
+                </Tooltip>
 
                 {/* Robot state */}
                 {connected && (
