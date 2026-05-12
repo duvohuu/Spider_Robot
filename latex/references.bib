@@ -1,43 +1,229 @@
-@book{1,
-    author = "Nguyễn Đình Huy and Đậu Thế Cấp and Lê Xuân Đại",
-    title = "Giáo trình Xác suất Thống kê",
-    year = "2019",
-    publisher = "ĐHQG Tp Hồ Chí Minh",
-    address = "Tp Hồ Chí Minh"
+% ============================================================
+% Robot chân nhiều chân (Legged Robots)
+% ============================================================
+
+@article{raibert1986legged,
+    author  = {Raibert, Marc H.},
+    title   = {Legged Robots That Balance},
+    journal = {MIT Press},
+    year    = {1986},
+    address = {Cambridge, MA}
 }
 
-@book{2,
-    author = "Peter Dalgaard",
-    title = "Introductory Statistic with R",
-    year = "2008",
-    publisher = "Springer"
+@article{kajita2003biped,
+    author  = {Kajita, Shuuji and Kanehiro, Fumio and Kaneko, Kenji and Yokoi, Kazuhito and Hirukawa, Hirohisa},
+    title   = {The {3D} Linear Inverted Pendulum Mode: A Simple Modeling for a Biped Walking Pattern Generation},
+    journal = {Proceedings of IEEE/RSJ International Conference on Intelligent Robots and Systems},
+    year    = {2001},
+    pages   = {239--246}
 }
 
-@book{3,
-    author = "Nguyễn Văn Tuấn",
-    title = "Xử lí số liệu và biểu đồ bằng R",
+@article{saranli2001rhex,
+    author  = {Saranli, Uluc and Buehler, Martin and Koditschek, Daniel E.},
+    title   = {{RHex}: A Simple and Highly Mobile Hexapod Robot},
+    journal = {The International Journal of Robotics Research},
+    year    = {2001},
+    volume  = {20},
+    number  = {7},
+    pages   = {616--631}
 }
 
-@book{4,
-    author = "Nguyễn Tiến Dũng and Đỗ Đức Thái", 
-    title = "Nhập môn hiện đại Xác suất và Thống kê",
-    year = "2021"
-}
-@article{5,
-    author    = "Leo Breiman",
-    title     = "Random Forests",
-    journal   = "Machine Learning",
-    year      = "2001",
-    volume    = "45",
-    number    = "1",
-    pages     = "5--32",
-    publisher = "Springer"
+@article{quinn2001parallel,
+    author  = {Quinn, Roger D. and Nelson, Gregory M. and Bachmann, Richard J. and Kingsley, Daniel A. and Offi, John T. and Allen, Tim J. and Ritzmann, Roy E.},
+    title   = {Parallel Complementary Strategies for Implementing Biological Principles into Mobile Robots},
+    journal = {The International Journal of Robotics Research},
+    year    = {2003},
+    volume  = {22},
+    number  = {3--4},
+    pages   = {169--186}
 }
 
-@book{6,
-    author    = "Gareth James and Daniela Witten and Trevor Hastie and Robert Tibshirani",
-    title     = "An Introduction to Statistical Learning with Applications in R",
-    year      = "2013",
-    publisher = "Springer",
-    address   = "New York"
+@article{gonzalez2013quadrupedal,
+    author  = {Gonzalez-de-Santos, Pablo and Garcia, Elena and Estremera, Joaquin},
+    title   = {Quadrupedal Locomotion: An Introduction to the Control of Four-Legged Robots},
+    year    = {2006},
+    publisher = {Springer},
+    address = {London}
+}
+
+% ============================================================
+% Dáng đi (Gait Algorithms)
+% ============================================================
+
+@article{wilson1966insect,
+    author  = {Wilson, Donald M.},
+    title   = {Insect Walking},
+    journal = {Annual Review of Entomology},
+    year    = {1966},
+    volume  = {11},
+    pages   = {103--122}
+}
+
+@article{mcghee1968stability,
+    author  = {McGhee, Robert B. and Frank, Andrew A.},
+    title   = {On the Stability Properties of Quadruped Creeping Gaits},
+    journal = {Mathematical Biosciences},
+    year    = {1968},
+    volume  = {3},
+    pages   = {331--351}
+}
+
+@article{kume2017tripod,
+    author  = {Kume, Toshihiro and Sato, Takeshi and Ota, Jun},
+    title   = {Gait Transition from Tripod to Tetrapod Gait for Hexapod Robot},
+    journal = {ROBOMECH Journal},
+    year    = {2017},
+    volume  = {4},
+    number  = {1},
+    pages   = {1--14}
+}
+
+% ============================================================
+% Động học robot (Kinematics)
+% ============================================================
+
+@article{angeles2007fundamentals,
+    author    = {Angeles, Jorge},
+    title     = {Fundamentals of Robotic Mechanical Systems: Theory, Methods, and Algorithms},
+    edition   = {3},
+    year      = {2007},
+    publisher = {Springer},
+    address   = {New York}
+}
+
+@article{lynch2017modern,
+    author    = {Lynch, Kevin M. and Park, Frank C.},
+    title     = {Modern Robotics: Mechanics, Planning, and Control},
+    year      = {2017},
+    publisher = {Cambridge University Press},
+    address   = {Cambridge}
+}
+
+% ============================================================
+% Phần cứng & Vi điều khiển
+% ============================================================
+
+@manual{esp32datasheet,
+    author       = {{Espressif Systems}},
+    title        = {{ESP32} Series Datasheet},
+    year         = {2023},
+    organization = {Espressif Systems},
+    note         = {Version 4.4. \url{https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf}}
+}
+
+@manual{pca9685datasheet,
+    author       = {{NXP Semiconductors}},
+    title        = {{PCA9685}: 16-channel, 12-bit {PWM Fm+} {I$^2$C}-bus {LED} controller},
+    year         = {2015},
+    organization = {NXP Semiconductors},
+    note         = {Product data sheet Rev. 4. \url{https://www.nxp.com/docs/en/data-sheet/PCA9685.pdf}}
+}
+
+@manual{mg996rdatasheet,
+    author       = {{Tower Pro}},
+    title        = {{MG996R} Metal Gear Servo Motor Datasheet},
+    year         = {2018},
+    organization = {Tower Pro Pte. Ltd.},
+    note         = {\url{https://www.towerpro.com.tw/product/mg996r}}
+}
+
+@manual{srf05datasheet,
+    author       = {{Devantech Ltd.}},
+    title        = {{SRF05} -- Ultra-Sonic Ranger Technical Specification},
+    year         = {2010},
+    organization = {Devantech Ltd.},
+    note         = {\url{https://www.robot-electronics.co.uk/htm/srf05tech.htm}}
+}
+
+@manual{xl4016datasheet,
+    author       = {{XLSEMI}},
+    title        = {{XL4016} 180KHz 8A Adjustable Step-Down {DC/DC} Converter Datasheet},
+    year         = {2015},
+    organization = {XLSEMI},
+    note         = {\url{http://www.xlsemi.com/datasheet/XL4016\%20datasheet.pdf}}
+}
+
+% ============================================================
+% Phần mềm & Giao thức truyền thông
+% ============================================================
+
+@manual{freertos,
+    author       = {{FreeRTOS.org}},
+    title        = {{FreeRTOS} Real Time Kernel Reference Manual},
+    year         = {2023},
+    organization = {Real Time Engineers Ltd.},
+    note         = {\url{https://www.freertos.org}}
+}
+
+@techreport{rfc6455,
+    author      = {Fette, Ian and Melnikov, Alexey},
+    title       = {The {WebSocket} Protocol},
+    institution = {Internet Engineering Task Force (IETF)},
+    year        = {2011},
+    type        = {RFC},
+    number      = {6455},
+    note        = {\url{https://tools.ietf.org/html/rfc6455}}
+}
+
+@manual{espidf,
+    author       = {{Espressif Systems}},
+    title        = {{ESP-IDF} Programming Guide},
+    year         = {2023},
+    organization = {Espressif Systems},
+    note         = {Version 5.x. \url{https://docs.espressif.com/projects/esp-idf/en/latest}}
+}
+
+% ============================================================
+% Vật liệu & Phân tích kết cấu
+% ============================================================
+
+@article{rankouhi2016failure,
+    author  = {Rankouhi, Behnam and Javadpour, Sina and Delfanian, Fereidoon and Letcher, Todd},
+    title   = {Failure Analysis and Mechanical Characterization of 3D Printed {ABS} with Respect to Layer Thickness and Orientation},
+    journal = {Journal of Failure Analysis and Prevention},
+    year    = {2016},
+    volume  = {16},
+    number  = {3},
+    pages   = {467--481}
+}
+
+@article{wittbrodt2013life,
+    author  = {Wittbrodt, Benjamin T. and Glover, A. G. and Laureto, John and Anzalone, Gerald C. and Oppliger, Dennis and Irwin, Jesse L. and Pearce, Joshua M.},
+    title   = {Life-Cycle Economic Analysis of Distributed Manufacturing with Open-Source 3-D Printers},
+    journal = {Mechatronics},
+    year    = {2013},
+    volume  = {23},
+    number  = {6},
+    pages   = {713--726}
+}
+
+% ============================================================
+% Tài liệu tham khảo bổ sung -- Robot nhện hexapod
+% ============================================================
+
+@article{mahapatra2018hexapod,
+    author  = {Mahapatra, Abhijit and Roy, Shibendu Shekhar and Mandal, Dilip Kumar and Sahu, Nirmal Kumar},
+    title   = {Study on Gait Planning and Foot Force Distribution of a Hybrid Hexapod Robot},
+    journal = {Procedia Computer Science},
+    year    = {2018},
+    volume  = {133},
+    pages   = {107--114}
+}
+
+@article{tedeschi2014design,
+    author  = {Tedeschi, Franco and Carbone, Giuseppe},
+    title   = {Design Issues for Hexapod Walking Robots},
+    journal = {Robotics},
+    year    = {2014},
+    volume  = {3},
+    number  = {2},
+    pages   = {181--206}
+}
+
+@inproceedings{lee2017design,
+    author    = {Lee, Woong-Ryeol and Seo, Tae-Won},
+    title     = {Design of Hexapod Robot Inspired by Insect Locomotion},
+    booktitle = {Proceedings of the International Conference on Ubiquitous Robots and Ambient Intelligence (URAI)},
+    year      = {2017},
+    pages     = {752--754}
 }

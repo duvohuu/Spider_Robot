@@ -16,4 +16,5 @@ idf_component_register(
         json
         driver
         freertos
+        esp_timer
 )

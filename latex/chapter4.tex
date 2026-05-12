@@ -1,124 +1,216 @@
-\chapter{THIẾT KẾ KHÁI QUÁT}
-    \section{Thiết kế khái quát điện}
-        \subsection{Lựa chọn phương án điện}
-            \subsubsection{Phương án vi điều khiển (Microcontroller)}
+\chapter{PHÂN TÍCH VÀ MÔ HÌNH HÓA}
+ 
+% ============================================================
+\section{Mô phỏng chuyển động robot bằng phần mềm MATLAB}
+% ============================================================
+ 
+\subsection{Tính toán động học}
+ 
+\subsubsection{Hệ tọa độ và phép đổi hệ}
+ 
+Chương trình sử dụng ba hệ tọa độ:
+\begin{itemize}
+    \item \textbf{Hệ body}: gắn với thân robot, dùng để khai báo vị trí khớp hông (hip) và điểm đặt chân trung tính.
+    \item \textbf{Hệ world}: dùng để biểu diễn robot trong không gian 3D toàn cục.
+    \item \textbf{Hệ local}: gắn với từng chân, dùng để giải động học của từng chân bằng một bộ công thức chung.
+\end{itemize}
+ 
+Việc chuẩn hóa cả 6 chân về cùng một hệ quy chiếu cho phép dùng chung một hàm động học nghịch và động học thuận cho toàn bộ robot, giúp đơn giản hóa đáng kể quá trình lập trình.
+ 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pictures/coordinate_system.png}
+    \caption{Sơ đồ hệ tọa độ và phép đổi hệ giữa các chân robot}
+    \label{fig:coord_system}
+\end{figure}
+ 
+\subsubsection{Động học thuận và động học nghịch}
 
-            \hspace{0.5cm} Vi điều khiển là thành phần trung tâm của hệ thống điều khiển, chịu trách nhiệm tính toán thuật toán IK, điều phối gait controller, giao tiếp với các module ngoại vi và xử lý lệnh điều khiển từ xa. Nhóm đề xuất và so sánh ba phương án vi điều khiển phổ biến:
+\hspace{0.5cm} Mỗi chân robot có 3 bậc tự do với các khớp Coxa ($q_1$), Femur ($q_2$), Tibia ($q_3$) và chiều dài đoạn tương ứng $L_1$, $L_2$, $L_3$.
 
-            \begin{table}[H]
-            \centering
-            \caption{So sánh các phương án vi điều khiển}
-            \label{tab:mcu_options}
-            \begin{tabular}{|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3.8cm}|}
-            \hline
-            \textbf{Tiêu chí} & \textbf{Arduino Mega 2560} & \textbf{STM32F103C8T6} & \textbf{ESP32} \\
-            \hline
-            \textbf{Xung nhịp} & 16 MHz & 72 MHz & 240 MHz (dual-core) \\
-            \hline
-            \textbf{RAM} & 8 KB & 20 KB & 520 KB \\
-            \hline
-            \textbf{WiFi / Bluetooth} & Không & Không & Tích hợp sẵn \\
-            \hline
-            \textbf{Giao tiếp} & UART, SPI, I\textsuperscript{2}C & UART, SPI, I\textsuperscript{2}C & UART, SPI, I\textsuperscript{2}C, CAN \\
-            \hline
-            \textbf{Môi trường lập trình} & Arduino IDE & STM32CubeIDE, VSCode + PlatformIO & Arduino IDE, VSCode + ESP-IDF, PlatformIO \\
-            \hline
-            \end{tabular}
-            \end{table}
+\textbf{Động học thuận (Forward Kinematics):} Cho trước góc khớp $(q_1, q_2, q_3)$, tính tọa độ bàn chân trong hệ local của chân:
 
-            \textbf{Kết luận:} Nhóm lựa chọn \textbf{ESP32} làm vi điều khiển trung tâm. Với xung nhịp 240 MHz dual-core và RAM 520 KB, ESP32 đủ năng lực xử lý đồng thời thuật toán IK cho 6 chân và gait controller trong thời gian thực. WiFi và Bluetooth tích hợp sẵn loại bỏ hoàn toàn nhu cầu thêm module không dây ngoài, giúp đơn giản hóa phần cứng và giảm chi phí. ESP32 cũng hỗ trợ linh hoạt nhiều môi trường lập trình (Arduino IDE, VSCode + ESP-IDF, PlatformIO), thuận tiện cho quá trình phát triển. Arduino Mega 2560 bị loại do xung nhịp thấp (16 MHz) không đủ để xử lý IK realtime cho 6 chân và không có giao tiếp không dây tích hợp. STM32F103C8T6 tuy hiệu năng tốt nhưng yêu cầu STM32CubeIDE chuyên biệt và không hỗ trợ không dây, làm tăng độ phức tạp tích hợp hệ thống.
+\begin{equation}
+    p = L_1 + L_2 \cos q_2 + L_3 \cos(q_2 + q_3)
+\end{equation}
+\begin{equation}
+    X = p \cos q_1, \qquad Y = p \sin q_1
+\end{equation}
+\begin{equation}
+    Z = L_2 \sin q_2 + L_3 \sin(q_2 + q_3)
+\end{equation}
 
-                        \subsubsection{Phương án cảm biến vật cản}
+trong đó $p$ là tầm với nằm ngang từ gốc khớp Coxa đến bàn chân.
 
-            \hspace{0.5cm} Cảm biến vật cản giúp robot phát hiện chướng ngại vật phía trước trong quá trình di chuyển, là nền tảng cho các tính năng tự tránh va chạm. Nhóm xem xét ba nhóm cảm biến phổ biến:
+\textbf{Động học nghịch (Inverse Kinematics):} Cho trước vị trí bàn chân $(X, Y, Z)$ trong hệ local, tính ngược lại các góc khớp:
 
-            \begin{table}[H]
-            \centering
-            \caption{So sánh các nhóm cảm biến vật cản}
-            \label{tab:sensor_options}
-            \begin{tabular}{|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3.8cm}|}
-            \hline
-            \textbf{Tiêu chí} & \textbf{Cảm biến siêu âm} & \textbf{Cảm biến hồng ngoại} & \textbf{Cảm biến thu phát (ToF / Laser)} \\
-            \hline
-            \textbf{Nguyên lý} & Phản xạ sóng âm & Phản xạ tia hồng ngoại & Đo thời gian bay của xung ánh sáng \\
-            \hline
-            \textbf{Tầm đo} & 2 -- 400 cm & 2 -- 30 cm & 3 -- 200 cm \\
-            \hline
-            \textbf{Ảnh hưởng ánh sáng} & Không & Có & Không \\
-            \hline
-            \textbf{Giao tiếp} & GPIO (Trig/Echo) & GPIO (analog/digital) & I\textsuperscript{2}C / UART \\
-            \hline
-            \textbf{Độ chính xác} & $\pm$3 mm & $\pm$5 mm & $\pm$1 mm \\
-            \hline
-            \textbf{Chi phí} & Thấp & Rất thấp & Cao \\
-            \hline
-            \end{tabular}
-            \end{table}
+\textbf{Bước 1} — Góc Coxa:
+\begin{equation}
+    q_1 = \mathrm{atan2}(Y,\, X)
+\end{equation}
 
-            \textbf{Kết luận:} Nhóm lựa chọn \textbf{cảm biến siêu âm HC-SRF05} cho phương án phát hiện vật cản. HC-SRF05 là phiên bản cải tiến của HC-SR04, hỗ trợ thêm chế độ 1 dây (OUT mode), tầm đo 2--450 cm và độ chính xác tương đương. Cảm biến siêu âm không bị ảnh hưởng bởi ánh sáng môi trường, phù hợp hoạt động trong nhiều điều kiện chiếu sáng khác nhau. Cảm biến hồng ngoại bị loại do tầm đo ngắn ($<$30 cm) và dễ bị nhiễu bởi ánh sáng, không đủ để phát hiện vật cản kịp thời khi robot di chuyển. Nhóm cảm biến thu phát (ToF/Laser) tuy chính xác hơn nhưng có chi phí cao hơn đáng kể và không cần thiết với độ chính xác đó cho bài toán tránh vật cản đơn giản.
+\textbf{Bước 2} — Khoảng cách nằm ngang từ gốc Femur đến bàn chân và đường chéo tổng hợp:
+\begin{equation}
+    d = \sqrt{X^2 + Y^2} - L_1, \qquad D = \sqrt{d^2 + Z^2}
+\end{equation}
 
-                        \subsubsection{Phương án động cơ}
+Điều kiện tồn tại nghiệm: $|L_2 - L_3| \leq D \leq L_2 + L_3$.
 
-            \hspace{0.5cm} Phần tử dẫn động là thành phần quan trọng nhất trong hệ thống chân robot, trực tiếp quyết định khả năng chuyển động và tải trọng của robot. Nhóm so sánh ba nhóm động cơ phù hợp cho ứng dụng robot nhện cỡ nhỏ:
+\textbf{Bước 3} — Góc Tibia (định lý cosin):
+\begin{equation}
+    \cos q_3 = \frac{D^2 - L_2^2 - L_3^2}{2\,L_2 L_3}, \qquad q_3 = \arccos(\cos q_3)
+\end{equation}
 
-            \begin{table}[H]
-            \centering
-            \caption{So sánh các nhóm động cơ}
-            \label{tab:motor_options}
-            \begin{tabular}{|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3.8cm}|>{\centering\arraybackslash}m{3.8cm}|}
-            \hline
-            \textbf{Tiêu chí} & \textbf{Servo RC} & \textbf{Động cơ BLDC} & \textbf{Động cơ DC + encoder + hộp số} \\
-            \hline
-            \textbf{Điều khiển vị trí} & PWM (50 Hz) & ESC + encoder / FOC & PWM + driver + đọc encoder \\
-            \hline
-            \textbf{Phản hồi vị trí} & Không đọc được từ ngoài & Cần encoder ngoài + FOC & Cần xử lý encoder riêng \\
-            \hline
-            \textbf{Driver tích hợp} & Có & Không, cần ESC riêng & Không \\
-            \hline
-            \textbf{Độ phức tạp tích hợp} & Thấp & Rất cao & Cao \\
-            \hline
-            \textbf{Chi phí (18 khớp)} & Thấp & Cao & Trung bình \\
-            \hline
-            \end{tabular}
-            \end{table}
+\textbf{Bước 4} — Góc Femur:
+\begin{equation}
+    q_2 = \mathrm{atan2}(Z,\, d) - \mathrm{atan2}\!\left(L_3 \sin q_3,\; L_2 + L_3 \cos q_3\right)
+\end{equation}
 
-            \textbf{Kết luận:} Nhóm lựa chọn nhóm \textbf{servo RC}, cụ thể là \textbf{MG996R}, cho toàn bộ 18 khớp của robot. Servo RC tích hợp sẵn hộp số, mạch điều khiển và cơ cấu hồi tiếp vị trí nội bộ, chỉ cần tín hiệu PWM từ vi điều khiển là đủ để định vị góc — điều này giúp đơn giản hóa tối đa phần cứng. MG996R với bánh răng kim loại cung cấp moment xoắn 9.4--11 kgf.cm, đủ đáp ứng tải trọng robot dưới 1.5 kg với chi phí hợp lý. Động cơ BLDC bị loại do để điều khiển vị trí chính xác cần thêm ESC, encoder ngoài và giải thuật FOC, làm tăng độ phức tạp tích hợp lên rất cao so với yêu cầu đề tài. Nhóm động cơ DC bị loại do yêu cầu thêm mạch driver H-bridge, xử lý encoder riêng biệt, làm tăng đáng kể độ phức tạp phần cứng và phần mềm.
+Cấu hình elbow-down (dấu $+$ trong $q_3$) được chọn để đảm bảo khoảng tĩnh không dưới thân robot.
 
-                        \subsubsection{Phương án nguồn điện}
 
-            \hspace{0.5cm} Hệ thống robot nhện có hai nhóm tải điện với đặc tính khác nhau rõ rệt: (1) nhóm servo động cơ tiêu thụ dòng cao ($\sim$1--2.5 A/servo lúc tải) và gây nhiễu điện áp lớn; (2) nhóm mạch điều khiển (vi điều khiển, cảm biến, module) yêu cầu điện áp ổn định và nhiễu thấp. Nhóm đề xuất và so sánh hai phương án cấp nguồn:
+\subsubsection{Phép đổi hệ tọa độ body sang local}
 
-            \begin{table}[h!]
-            \centering
-            \caption{So sánh các phương án nguồn điện}
-            \label{tab:power_options}
-            \begin{tabular}{|>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{5.5cm}|>{\centering\arraybackslash}m{5.5cm}|}
-            \hline
-            \textbf{Tiêu chí} & \textbf{Một nguồn duy nhất} & \textbf{Hai nguồn tách biệt} \\
-            \hline
-            \textbf{Cách ly nhiễu servo} & Không & Có \\
-            \hline
-            \textbf{Ổn định điện áp điều khiển} & Thấp (bị ảnh hưởng servo) & Cao \\
-            \hline
-            \textbf{Nguy cơ reset vi điều khiển} & Cao (sụt áp khi servo tải) & Thấp \\
-            \hline
-            \textbf{Độ phức tạp mạch} & Thấp & Trung bình (thêm DC-DC) \\
-            \hline
-            \textbf{Khối lượng} & Nhẹ hơn & Tăng nhẹ \\
-            \hline
-            \end{tabular}
-            \end{table}
+\hspace{0.5cm} Mỗi chân $i$ được gắn vào thân robot tại một góc định hướng $\psi_i$ đo từ trục $X$ thân (ngược chiều kim đồng hồ). Các giá trị $\psi_i$ của 6 chân lần lượt là: LF $45°$, LM $90°$, LB $135°$, RF $-45°$, RM $-90°$, RB $-135°$.
 
-            \textbf{Kết luận:} Nhóm lựa chọn phương án \textbf{hai nguồn tách biệt}. Phương án một nguồn duy nhất bị loại vì khi nhiều servo đồng thời chịu tải, dòng tiêu thụ tổng có thể vượt 10 A, gây sụt áp đáng kể trên đường dây và trực tiếp làm mất ổn định điện áp cấp cho vi điều khiển, dẫn đến reset hoặc lỗi logic không mong muốn.
-        \subsection{Sơ đồ khối hệ thống điện}
-            \begin{figure}[H]
-                \centering
-                \includegraphics[width=1\textwidth, trim=0.1cm 0.1cm 0.1cm 0.1cm, clip]{pictures/ElectricalDiagram.pdf}                \caption{Sơ đồ khối hệ thống điện}
-                \label{fig:block_diagram}
-            \end{figure}
+Khi bàn chân có tọa độ $(X_b, Y_b, Z_b)$ trong hệ body, tọa độ tương ứng trong hệ local của chân $i$ được tính bằng phép quay ngược chiều góc $\psi_i$ quanh trục $Z$:
 
-    \section{Thiết kế khái quát cơ khí}
-    \section{Thiết kế khái quát giải thuật điều khiển}
-    \section{Thiết kế khái quát phần mềm}
-    
-                    
+\begin{equation}
+    \begin{bmatrix} X_l \\ Y_l \end{bmatrix}
+    =
+    \begin{bmatrix} \cos\psi_i & \sin\psi_i \\ -\sin\psi_i & \cos\psi_i \end{bmatrix}
+    \begin{bmatrix} X_b \\ Y_b \end{bmatrix},
+    \qquad Z_l = Z_b
+\end{equation}
+
+Trong chương trình MATLAB, phép đổi hệ này được áp dụng cho cả hip lẫn bàn chân trước khi giải IK, đảm bảo bộ công thức IK chung được dùng cho tất cả 6 chân mà không cần viết riêng cho từng chân.
+
+
+\subsubsection{Tính lại động học thuận để dựng lại chân}
+
+\hspace{0.5cm} Sau khi có $(q_1, q_2, q_3)$ từ IK, động học thuận được áp dụng để tính lại bốn điểm mốc của chân trong hệ local, phục vụ vẽ cấu trúc xương chân lên đồ thị:
+
+\begin{itemize}
+    \item $P_0$: gốc khớp Coxa (hip) — điểm gốc hệ local, $(0,\, 0,\, 0)$.
+    \item $P_1$: điểm cuối đoạn Coxa:
+        \begin{equation}
+            P_1 = P_0 + L_1\,\begin{bmatrix}\cos q_1 \\ \sin q_1 \\ 0\end{bmatrix}
+        \end{equation}
+    \item $P_2$: điểm cuối đoạn Femur:
+        \begin{equation}
+            P_2 = P_1 + L_2\,\begin{bmatrix}\cos q_1 \cos q_2 \\ \sin q_1 \cos q_2 \\ \sin q_2\end{bmatrix}
+        \end{equation}
+    \item $P_3$: điểm cuối đoạn Tibia (bàn chân):
+        \begin{equation}
+            P_3 = P_2 + L_3\,\begin{bmatrix}\cos q_1 \cos(q_2+q_3) \\ \sin q_1 \cos(q_2+q_3) \\ \sin(q_2+q_3)\end{bmatrix}
+        \end{equation}
+\end{itemize}
+
+Bốn điểm $P_0 \to P_1 \to P_2 \to P_3$ sau đó được chuyển về hệ world (cộng vị trí hip trong hệ world và xoay theo $\psi_i$) rồi vẽ bằng lệnh \texttt{plot3} trong MATLAB để tái hiện hình dạng chân robot trong không gian 3D.
+
+
+ 
+\subsection{Các bước tiến hành lập trình mô phỏng}
+ 
+Quá trình lập trình mô phỏng chuyển động robot được thực hiện theo các bước sau:
+ 
+\begin{enumerate}
+    \item \textbf{Xác định hình học robot}: vị trí hip, chiều dài Coxa -- Femur -- Tibia và vị trí thân ban đầu.
+    \item \textbf{Thiết lập quy luật dáng đi (gait)}: chu kỳ bước $T$, hệ số $\beta$, chiều dài bước \texttt{stepL}, độ nhấc chân \texttt{stepH} và độ lệch pha giữa hai nhóm tripod.
+    \item \textbf{Sinh quỹ đạo bàn chân} trong hệ body cho từng chân theo pha đứng (stance) hoặc pha nhấc (swing).
+    \item \textbf{Cộng vị trí thân} để thu được hip và bàn chân trong hệ world.
+    \item \textbf{Đổi vector} từ hệ world về hệ local của từng chân bằng ma trận quay quanh trục $z$.
+    \item \textbf{Giải động học nghịch} để tìm $q_1$, $q_2$, $q_3$ cho từng chân.
+    \item \textbf{Giải động học thuận} để dựng lại $P_0$, $P_1$, $P_2$, $P_3$ và vẽ robot.
+    \item \textbf{Xây dựng support polygon} từ các chân chống đất để kiểm tra ổn định hình học.
+\end{enumerate}
+ 
+\subsection{Kết quả mô phỏng chuyển động}
+ 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pictures/MatlabResult.png}
+    \caption{Kết quả mô phỏng chuyển động robot 6 chân trong MATLAB}
+    \label{fig:matlab_result}
+\end{figure}
+ 
+ 
+% ============================================================
+\section{Mô phỏng lực bằng phần mềm ANSYS}
+% ============================================================
+Trong đề tài này, ANSYS được sử dụng để mô phỏng khả năng chịu lực của kết cấu robot. Ngoài module Static Structural được áp dụng trực tiếp, phần mềm còn hỗ trợ các chức năng như: Coupled Field (mô phỏng bảng mạch điện tử, cảm biến siêu âm), Electric (phân tích điện trường, điện thế), Harmonic (mô phỏng dao động điều hòa), Hydrodynamic (tương tác kết cấu với môi trường nước) và LS-DYNA (động lực học phi tuyến tính).
+
+\subsection{Thiết lập bài toán mô phỏng}
+ 
+\subsubsection{Chọn vật liệu}
+ 
+Vật liệu sử dụng chính trong thiết kế robot là nhựa in 3D PLA với các thông số:
+ 
+\begin{table}[H]
+    \centering
+    \caption{Thông số vật liệu nhựa PLA}
+    \label{tab:pla_material}
+    \begin{tabular}{lll}
+        \hline
+        \textbf{Thông số} & \textbf{Giá trị} & \textbf{Đơn vị} \\
+        \hline
+        Khối lượng riêng & 1240 & kg/m$^3$ \\
+        Mô đun đàn hồi & $3{,}5 \times 10^9$ & Pa \\
+        Hệ số Poisson & 0{,}35 & -- \\
+        Giới hạn chảy & 60 & MPa \\
+        \hline
+    \end{tabular}
+\end{table}
+ 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{pictures/AnsysMaterial.png}
+    \caption{Gán vật liệu PLA cho mô hình trong ANSYS}
+    \label{fig:ansys_material}
+\end{figure}
+ 
+\subsubsection{Nhập file bản vẽ mô phỏng}
+ 
+ANSYS chỉ có thể đọc file dưới định dạng STEP và IGS. Do bản vẽ SolidWorks quá chi tiết sẽ gây khó khăn cho quá trình chia lưới phần tử, nên chỉ sử dụng bản vẽ đơn giản hóa để tiến hành mô phỏng chịu lực.
+ 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{pictures/AnsysImport.png}
+    \caption{File bản vẽ đơn giản hóa được nhập vào ANSYS (định dạng STEP)}
+    \label{fig:ansys_import}
+\end{figure}
+ 
+\subsubsection{Các bước tiến hành mô phỏng}
+ 
+Quá trình mô phỏng chịu lực trong ANSYS được thực hiện theo các bước:
+ 
+\begin{enumerate}
+    \item Gán vật liệu cho từng phần tử của robot.
+    \item Thiết lập các điểm liên kết (contact) giữa các chân, điểm nối và thân robot.
+    \item Chia lưới phần tử (mesh); làm mịn lưới tại các vị trí chịu lực chủ đạo.
+    \item Thêm điều kiện biên cố định tại các chân tiếp đất (trong thực tế, khi di chuyển chỉ có 3 chân chịu lực).
+    \item Thêm tải trọng: trọng lực và tải bao gồm khối lượng các động cơ.
+    \item Xuất các kết quả mong muốn (ứng suất, chuyển vị, biến dạng).
+\end{enumerate}
+ 
+\subsection{Kết quả mô phỏng}
+ 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{pictures/AnsysResult.png}
+    \caption{Kết quả phân tích lực trong ANSYS -- phân bố ứng suất và chuyển vị}
+    \label{fig:ansys_result}
+\end{figure}
+ 
+\subsection{Nhận xét kết quả}
+ 
+Kết quả mô phỏng cho thấy:
+ 
+\begin{itemize}
+    \item Biến dạng lớn nhất của kết cấu chỉ đạt \textbf{0{,}15 mm}, là giá trị rất nhỏ so với kích thước tổng thể của robot.
+    \item Biến dạng theo phương ngang nhỏ hơn 2\% so với kích thước ngang, trong khi biến dạng theo phương đứng xấp xỉ 0\%.
+    \item Các chân chịu lực khác nhau do góc tiếp đất khác nhau giữa các chân trong từng tư thế chuyển động.
+\end{itemize}
+ 
+Kết quả này khẳng định rằng kết cấu robot bằng nhựa PLA in 3D hoàn toàn đủ độ bền cơ học để hoạt động trong các điều kiện tải trọng thực tế của đề tài.
+ 

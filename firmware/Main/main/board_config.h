@@ -12,5 +12,5 @@
 //  Comment out SRF05_ENABLE để tắt toàn bộ tính năng này
 // ============================================================
 #define SRF05_ENABLE
-#define SRF05_TRIG_GPIO  18   // GPIO kết nối chân TRIG
-#define SRF05_ECHO_GPIO  19   // GPIO kết nối chân ECHO (qua voltage divider 5V→3.3V)
+#define SRF05_TRIG_GPIO  26   // GPIO kết nối chân TRIG
+#define SRF05_ECHO_GPIO  25   // GPIO kết nối chân ECHO (qua voltage divider 5V→3.3V)

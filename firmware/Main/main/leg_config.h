@@ -16,13 +16,13 @@
 #define LB_FEMUR_CH   9
 #define LB_TIBIA_CH   8
 
-#define RF_COXA_CH   10
+#define RF_COXA_CH    9
 #define RF_FEMUR_CH   7
 #define RF_TIBIA_CH   8
 
 #define RM_COXA_CH   11
 #define RM_FEMUR_CH  12
-#define RM_TIBIA_CH   9
+#define RM_TIBIA_CH  10
 
 #define RB_COXA_CH   15
 #define RB_FEMUR_CH  13

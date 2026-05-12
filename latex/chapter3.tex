@@ -150,4 +150,79 @@
 
         \textbf{WiFi (ESP8266 / ESP32):} Phạm vi rộng hơn, hỗ trợ giao thức TCP/UDP, cho phép điều khiển qua trình duyệt web hoặc ứng dụng mạng. ESP32 tích hợp cả WiFi và Bluetooth trên cùng một chip, là lựa chọn linh hoạt cho các dự án robot.
    
+    \section{Các sản phẩm tham khảo}
 
+        \hspace{0.5cm} Trong quá trình nghiên cứu và định hướng thiết kế, nhóm đã khảo sát một số mô hình robot chân tiêu biểu trên thế giới để làm cơ sở so sánh và lựa chọn phương án phù hợp.
+
+        \subsection{Robot MiniRHex}
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\textwidth]{pictures/minirhex.png}
+                \caption{Robot MiniRHex}
+            \end{figure}
+
+            \hspace{0.5cm} MiniRHex là một phiên bản robot 6 chân nhỏ gọn lấy cảm hứng từ thiết kế RHex. Điểm đặc trưng của robot này là sử dụng chân đàn hồi hình chữ C, mỗi chân chỉ cần một động cơ điều khiển, giúp đơn giản hóa đáng kể cơ cấu truyền động so với các thiết kế chân đa khớp.
+
+            \hspace{0.5cm} Thành phần phần cứng chính:
+            \begin{itemize}
+                \item Vi điều khiển trung tâm \textbf{ESP32}.
+                \item 6 động cơ -- mỗi chân chỉ cần 1 động cơ quay liên tục.
+                \item Chân đàn hồi hình chữ C được chế tạo từ vật liệu có tính đàn hồi cao.
+                \item Cảm biến IMU (BNO055 hoặc MPU6050) để xác định góc nghiêng và gia tốc thân robot trong không gian.
+                \item 6 mạch cầu H độc lập để điều khiển tốc độ và đảo chiều 6 động cơ.
+            \end{itemize}
+
+            \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{pictures/minirhex_mechanical.png}
+            \caption{Sơ đồ nguyên lý máy của MiniRHex}
+            \end{figure}
+            
+            \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{pictures/minirhex_electrical.png}
+            \caption{Sơ đồ khối hệ thống điện MiniRHex}
+            \end{figure}
+
+            \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{pictures/minirhex_flowchart.png}
+            \caption{Lưu đồ quy trình vận hành MiniRHex}
+            \end{figure}
+
+        \subsection{Robot miniHexa (Hiwonder)}
+
+            \hspace{0.5cm} miniHexa là robot hexapod thương mại của hãng Hiwonder, hướng đến ứng dụng giáo dục và nghiên cứu. Robot tích hợp nhiều cảm biến và module AI, cho phép lập trình các tác vụ nhận dạng thị giác và phản hồi giọng nói.
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\textwidth]{pictures/minihexa.png}
+                \caption{Robot miniHexa của Hiwonder}
+            \end{figure}
+            \hspace{0.5cm} Thành phần phần cứng chính:
+            \begin{itemize}
+                \item Vi điều khiển trung tâm \textbf{ESP32}.
+                \item 18 micro servo tốc độ cao có tính năng chống kẹt.
+                \item Module AI Vision để xử lý thị giác máy tính.
+                \item Module nhận diện và phát giọng nói.
+                \item Cảm biến siêu âm (phát sáng RGB), cảm biến chạm và cảm biến góc nghiêng IMU.
+            \end{itemize}
+
+            \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{pictures/hiwonder_mechanical.png}
+            \caption{Sơ đồ nguyên lý máy của Hiwonder}
+            \end{figure}
+
+            \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{pictures/hiwonder_electrical.png}
+            \caption{Sơ đồ khối điện của Hiwonder}
+            \end{figure}
+
+            \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{pictures/hiwonder_flowchart.png}
+            \caption{Lưu đồ quy trình vận hành Hiwonder}
+            \end{figure}
+
+       

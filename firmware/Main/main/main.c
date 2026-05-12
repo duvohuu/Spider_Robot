@@ -56,7 +56,7 @@ void app_main(void)
 
         // ── Chuyển từ idle → running ─────────────────────────
         if (running && !was_running) {
-            tripod_init();
+            tripod_init(); 
             was_running = true;
         }
 
@@ -69,7 +69,7 @@ void app_main(void)
             s_obs_state = OBS_NORMAL;
             s_obs_turns = 0;
             gait_set_params(0, 0, 0, 0, 0, 0.0f);  // xóa trim
-#endif
+#endif                  
         }
 
         // ── Đang chạy: thực hiện 1 bước tripod ──────────────

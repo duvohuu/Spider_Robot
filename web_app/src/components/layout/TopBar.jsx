@@ -156,6 +156,22 @@ const TopBar = () => {
                     </Box>
                 )}
 
+                {/* Speed estimate */}
+                <Tooltip title="Estimated speed (from gait params)">
+                    <Box sx={{
+                        px: 1, py: 0.3, bgcolor: '#05141f',
+                        border: `1px solid ${animating ? '#ffab4060' : '#ffab4025'}`,
+                        borderRadius: 1, flexShrink: 0,
+                        boxShadow: animating ? '0 0 8px #ffab4020' : 'none',
+                        transition: 'border-color 0.3s, box-shadow 0.3s',
+                    }}>
+                        <Typography sx={{ color: animating ? '#ffab40' : '#ffab4060', fontFamily: 'monospace', fontSize: 12, whiteSpace: 'nowrap', transition: 'color 0.3s' }}>
+                            {((2 * gait.stepX) / (160 + gait.tLiftMs + gait.tSwingMs + gait.tDownMs) * 100).toFixed(1)}
+                            <Typography component="span" sx={{ fontSize: 10, color: '#3a6070', ml: 0.4 }}>cm/s</Typography>
+                        </Typography>
+                    </Box>
+                </Tooltip>
+
                 {/* Distance (SRF05) */}
                 <Tooltip title="Obstacle distance (SRF05)">
                     <Box sx={{
