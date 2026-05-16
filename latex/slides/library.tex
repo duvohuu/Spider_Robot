@@ -1,0 +1,70 @@
+% ============================================================
+% Tiếng Việt
+% ============================================================
+\usepackage{vntex}
+\usepackage[utf8]{inputenc}
+
+% ============================================================
+% Gói hỗ trợ
+% ============================================================
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{hyperref}
+
+% ============================================================
+% Đường dẫn ảnh dùng chung với report
+% ============================================================
+\graphicspath{{../report/pictures/}}
+
+% ============================================================
+% Theme Beamer
+% ============================================================
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Màu chủ đạo xanh HCMUT
+\definecolor{hcmutblue}{RGB}{0, 82, 165}
+\definecolor{hcmutgold}{RGB}{218, 165, 32}
+
+\setbeamercolor{palette primary}{bg=hcmutblue, fg=white}
+\setbeamercolor{palette secondary}{bg=hcmutblue!80, fg=white}
+\setbeamercolor{palette tertiary}{bg=hcmutblue!60, fg=white}
+\setbeamercolor{palette quaternary}{bg=hcmutblue, fg=white}
+\setbeamercolor{structure}{fg=hcmutblue}
+\setbeamercolor{section in toc}{fg=hcmutblue}
+\setbeamercolor{frametitle}{bg=hcmutblue, fg=white}
+\setbeamercolor{title}{bg=hcmutblue, fg=white}
+\setbeamercolor{block title}{bg=hcmutblue, fg=white}
+\setbeamercolor{block body}{bg=hcmutblue!10, fg=black}
+\setbeamercolor{alerted text}{fg=hcmutgold}
+
+% Font
+\setbeamerfont{title}{size=\large, series=\bfseries}
+\setbeamerfont{frametitle}{series=\bfseries}
+
+% Logo nhỏ ở footer
+\logo{\includegraphics[height=0.6cm]{hcmut.png}}
+
+% Ẩn nút điều hướng
+\setbeamertemplate{navigation symbols}{}
+
+% Hiện số trang
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.35\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm]{palette primary}%
+      \usebeamerfont{author in head/foot}\insertshortauthor
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.45\paperwidth,ht=2.5ex,dp=1.125ex,center]{palette secondary}%
+      \usebeamerfont{title in head/foot}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.20\paperwidth,ht=2.5ex,dp=1.125ex,right]{palette primary}%
+      \usebeamerfont{date in head/foot}
+      \insertframenumber{} / \inserttotalframenumber\hspace*{1em}
+    \end{beamercolorbox}%
+  }%
+  \vskip0pt%
+}
