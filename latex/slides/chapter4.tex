@@ -1,0 +1,93 @@
+% ============================================================
+% CHƯƠNG 4: PHÂN TÍCH VÀ MÔ HÌNH HÓA
+% ============================================================
+\section{Phân Tích Và Mô Hình Hóa}
+
+% ---- Slide 4.1: MATLAB - Hệ tọa độ ----
+\begin{frame}{Mô Phỏng MATLAB -- Hệ Tọa Độ}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+      \textbf{Ba hệ tọa độ sử dụng:}
+      \begin{itemize}
+        \item \textbf{Hệ body:} gắn với thân robot -- khai báo vị trí khớp hông
+        \item \textbf{Hệ world:} biểu diễn robot trong không gian 3D toàn cục
+        \item \textbf{Hệ local:} gắn với từng chân -- giải IK bằng công thức chung
+      \end{itemize}
+      \vspace{0.2cm}
+      \begin{block}{Lợi ích}
+        Chuẩn hóa 6 chân về cùng hệ quy chiếu $\Rightarrow$ dùng chung 1 hàm IK/FK
+      \end{block}
+    \column{0.45\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{coordinate_system.png}
+      \\\small\textit{Sơ đồ hệ tọa độ robot}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 4.2: MATLAB - Quy trình mô phỏng ----
+\begin{frame}{Mô Phỏng MATLAB -- Quy Trình}
+  \begin{enumerate}
+    \item Xác định hình học: vị trí hip, chiều dài Coxa--Femur--Tibia
+    \item Thiết lập dáng đi: chu kỳ $T$, hệ số $\beta$, chiều dài bước, độ nhấc chân
+    \item Sinh quỹ đạo bàn chân (stance / swing) theo pha trong hệ body
+    \item Cộng vị trí thân $\Rightarrow$ thu tọa độ hip và bàn chân trong hệ world
+    \item Đổi về hệ local từng chân (ma trận quay $\psi_i$)
+    \item \textbf{Giải IK} $\Rightarrow$ $(q_1, q_2, q_3)$ cho từng chân
+    \item \textbf{Giải FK} $\Rightarrow$ tái dựng $P_0 \to P_1 \to P_2 \to P_3$ vẽ robot
+    \item Dựng support polygon -- kiểm tra ổn định hình học
+  \end{enumerate}
+\end{frame}
+
+% ---- Slide 4.3: MATLAB - Kết quả ----
+\begin{frame}{Mô Phỏng MATLAB -- Kết Quả}
+  \centering
+  \includegraphics[width=0.85\textwidth]{MatlabResult.png}
+  \\\small\textit{Kết quả mô phỏng chuyển động tripod gait trong MATLAB}
+\end{frame}
+
+% ---- Slide 4.4: ANSYS - Thiết lập ----
+\begin{frame}{Mô Phỏng ANSYS -- Thiết Lập}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \textbf{Vật liệu PLA:}
+      \begin{itemize}
+        \item Khối lượng riêng: 1240 kg/m$^3$
+        \item Mô đun đàn hồi: $3.5 \times 10^9$ Pa
+        \item Hệ số Poisson: 0.35
+        \item Giới hạn chảy: 60 MPa
+      \end{itemize}
+      \vspace{0.1cm}
+      \centering
+      \includegraphics[width=0.9\linewidth, height=3.2cm, keepaspectratio]{AnsysMaterial.png}
+      \\\small\textit{Gán vật liệu PLA trong ANSYS}
+    \column{0.48\textwidth}
+      \textbf{Điều kiện mô phỏng:}
+      \begin{itemize}
+        \item File STEP đơn giản hóa từ SolidWorks
+        \item 3 chân cố định (tripod stance)
+        \item Tải: trọng lực + khối lượng động cơ
+      \end{itemize}
+      \vspace{0.1cm}
+      \centering
+      \includegraphics[width=0.9\linewidth, height=3.2cm, keepaspectratio]{AnsysImport.png}
+      \\\small\textit{File STEP nhập vào ANSYS}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 4.5: ANSYS - Kết quả ----
+\begin{frame}{Mô Phỏng ANSYS -- Kết Quả}
+  \begin{columns}[T]
+    \column{0.32\textwidth}
+      \centering
+      \includegraphics[width=\linewidth, height=4cm, keepaspectratio]{solidsolid_stress.png}
+      \\\small\textit{Ứng suất von Mises}
+    \column{0.32\textwidth}
+      \centering
+      \includegraphics[width=\linewidth, height=4cm, keepaspectratio]{solidworks_displacement.png}
+      \\\small\textit{Chuyển vị -- max $2.38$ mm}
+    \column{0.32\textwidth}
+      \centering
+      \includegraphics[width=\linewidth, height=4cm, keepaspectratio]{solidsolid_strain.png}
+      \\\small\textit{Biến dạng -- $\varepsilon_\mathrm{max}=3.19{\times}10^{-3}$}
+  \end{columns}
+\end{frame}

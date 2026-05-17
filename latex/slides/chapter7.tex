@@ -1,0 +1,145 @@
+% ============================================================
+% CHƯƠNG 7: KIỂM TRA, TINH CHỈNH VÀ SẢN XUẤT
+% ============================================================
+\section{Kiểm Tra, Tinh Chỉnh và Sản Xuất}
+
+% ---- Slide 7.1: Kết quả cơ khí ----
+\begin{frame}{Kết Quả Sản Xuất -- Cơ Khí}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+      \centering
+      \includegraphics[width=0.95\linewidth, height=0.65\textheight, keepaspectratio]{robot.png}
+      \\\small\textit{Robot 6 chân hoàn thiện}
+    \column{0.42\textwidth}
+      \begin{exampleblock}{Thông số thực tế}
+        \small
+        \begin{itemize}
+          \item Khối lượng: $\approx 2$ kg
+          \item Kích thước: $370 \times 300 \times 140$ mm
+          \item 18 servo MG996R
+          \item Vật liệu: PLA in 3D FDM
+        \end{itemize}
+      \end{exampleblock}
+      \vspace{0.1cm}
+      \begin{block}{Kiểm tra cơ học}
+        \small
+        \begin{itemize}
+          \item Tất cả khớp vận hành trơn tru
+          \item Kết cấu chịu tải tốt
+          \item Không có biến dạng đáng kể
+        \end{itemize}
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 7.2: Kết quả điện & phần mềm ----
+\begin{frame}{Kết Quả Điện Và Phần Mềm}
+  \begin{columns}[T]
+    \column{0.35\textwidth}
+      \centering
+      \includegraphics[width=\linewidth, height=0.48\textheight, keepaspectratio]{pcb_assembled.png}
+      \\\small\textit{PCB hoàn thiện}
+      \vspace{0.1cm}
+      \begin{exampleblock}{PCB}
+        \small Sản xuất + hàn tay\\
+        Kiểm tra thông mạch OK
+      \end{exampleblock}
+    \column{0.62\textwidth}
+      \begin{columns}[T]
+        \column{0.48\textwidth}
+          \centering
+          \includegraphics[width=\linewidth, height=0.5\textheight, keepaspectratio]{gait_mode.png}
+          \\\small\textit{Gait Mode}
+        \column{0.48\textwidth}
+          \centering
+          \includegraphics[width=\linewidth, height=0.5\textheight, keepaspectratio]{static_mode.png}
+          \\\small\textit{Static Mode}
+      \end{columns}
+      \vspace{0.1cm}
+      \begin{block}{Phần mềm Web App}
+        \small Điều khiển realtime -- WebSocket\\
+        Hiển thị 3D model robot
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 7.3: Kiểm tra vận hành & kết quả ----
+\begin{frame}{Kiểm Tra Vận Hành}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+      \centering
+      \includegraphics[width=\linewidth, height=0.62\textheight, keepaspectratio]{software_system.png}
+      \\\small\textit{Giao diện điều khiển tổng thể}
+    \column{0.45\textwidth}
+      \begin{exampleblock}{Kết quả đạt được}
+        \small
+        \begin{itemize}
+          \item Tripod gait: $\approx 4.84$ cm/s
+          \item Tiến / lùi / quay trái / phải
+          \item Tránh vật cản (SRF05)
+          \item Static pose ổn định
+        \end{itemize}
+      \end{exampleblock}
+      \vspace{0.1cm}
+      \begin{alertblock}{Hạn chế \& Định hướng}
+        \small
+        \begin{itemize}
+          \item Vận tốc chưa đạt 5 cm/s
+          \item Chưa tích hợp camera
+          \item Mở rộng: leo dốc, địa hình phức tạp
+        \end{itemize}
+      \end{alertblock}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 7.4: Kết luận ----
+\begin{frame}{Kết Luận}
+  \begin{columns}[T]
+    \column{0.6\textwidth}
+      \textbf{Nhóm đã hoàn thành:}
+      \begin{enumerate}
+        \item Nghiên cứu động học thuận / nghịch hexapod
+        \item Thiết kế và in 3D kết cấu cơ khí
+        \item Phát triển firmware ESP32 + FreeRTOS
+        \item Thiết kế mạch PCB tùy chỉnh
+        \item Xây dựng Web App điều khiển không dây
+        \item Tích hợp và kiểm tra thực nghiệm
+      \end{enumerate}
+    \column{0.4\textwidth}
+      \begin{block}{Bài học kinh nghiệm}
+        \begin{itemize}
+          \item Kết hợp tốt cơ -- điện -- phần mềm
+          \item Mô phỏng trước khi sản xuất tiết kiệm chi phí
+          \item Kiến trúc phân lớp dễ mở rộng
+        \end{itemize}
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 7.5: Cảm ơn ----
+\begin{frame}[plain, noframenumbering]
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[hcmutblue]
+      (current page.north west)
+      rectangle ([yshift=-2.0cm]current page.north east);
+    \fill[hcmutblue!15]
+      (current page.south west)
+      rectangle ([yshift=0.85cm]current page.south east);
+    \node[anchor=north west, inner sep=0.15cm]
+      at (current page.north west)
+      {\includegraphics[height=1.7cm]{hcmut.png}};
+    \node[anchor=west, text=white]
+      at ([xshift=2.4cm, yshift=-0.65cm]current page.north west)
+      {\small\bfseries Trường Đại Học Bách Khoa -- ĐHQG TP.HCM};
+    \node[anchor=west, text=white!80]
+      at ([xshift=2.4cm, yshift=-1.2cm]current page.north west)
+      {\footnotesize Thiết Kế Hệ Thống Cơ Điện Tử -- HK252};
+  \end{tikzpicture}
+
+  \vspace{2.2cm}
+  \begin{center}
+    {\color{hcmutblue}\Huge\bfseries Cảm Ơn!}\\[0.5cm]
+    {\color{hcmutblue!80}\large Thầy cô và các bạn đã lắng nghe}\\[0.4cm]
+    {\color{hcmutblue}\normalsize\bfseries Nhóm 05 -- HK252}
+  \end{center}
+\end{frame}

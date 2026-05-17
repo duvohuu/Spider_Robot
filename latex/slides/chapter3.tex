@@ -1,0 +1,156 @@
+% ============================================================
+% CHƯƠNG 3: THU THẬP THÔNG TIN VÀ TỔNG HỢP
+% ============================================================
+\section{Thu Thập Thông Tin Và Tổng Hợp}
+
+% ---- Slide 3.1: Cấu trúc cơ khí hexapod ----
+\begin{frame}{Cấu Trúc Cơ Khí Robot Nhện}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+      \textbf{Cấu trúc mỗi chân -- 3 khớp quay:}
+      \begin{itemize}
+        \item \textbf{Coxa:} Khớp gốc -- xoay ngang (yaw), xác định hướng chân
+        \item \textbf{Femur:} Khớp giữa -- nâng/hạ (pitch), ảnh hưởng tầm với
+        \item \textbf{Tibia:} Khớp cuối -- gấp/duỗi (pitch), xác định điểm tiếp đất
+      \end{itemize}
+      \vspace{0.3cm}
+      \begin{block}{Tổng bậc tự do}
+        $6 \text{ chân} \times 3 \text{ DOF} = \mathbf{18}$ servo hoạt động đồng thời
+      \end{block}
+    \column{0.42\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{hexapod_layout.png}
+      \\\small\textit{Bố trí tổng thể hexapod}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 3.2: Động học thuận ----
+\begin{frame}{Động Học Thuận (Forward Kinematics)}
+  \textbf{Cho góc khớp $(q_1, q_2, q_3)$ $\Rightarrow$ tìm vị trí đầu chân $(X, Y, Z)$:}
+  \vspace{0.2cm}
+  \begin{columns}[T]
+    \column{0.5\textwidth}
+      \begin{align}
+        p &= L_1 + L_2\cos q_2 + L_3\cos(q_2+q_3) \nonumber\\
+        X &= p\cos q_1 \nonumber\\
+        Y &= p\sin q_1 \nonumber\\
+        Z &= L_2\sin q_2 + L_3\sin(q_2+q_3) \nonumber
+      \end{align}
+    \column{0.46\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{leg_3dof.png}
+      \\\small\textit{Mô hình 3-DOF một chân}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 3.3: Động học nghịch ----
+\begin{frame}{Động Học Nghịch (Inverse Kinematics)}
+  \textbf{Cho vị trí đầu chân $(X, Y, Z)$ $\Rightarrow$ tìm góc khớp $(q_1, q_2, q_3)$:}
+  \vspace{0.1cm}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \textbf{Bước 1} -- Góc Coxa:
+      $q_1 = \mathrm{atan2}(Y,\, X)$
+
+      \vspace{0.2cm}
+      \textbf{Bước 2} -- Tầm với:
+      $d = \sqrt{X^2+Y^2} - L_1$,\quad $D = \sqrt{d^2+Z^2}$
+
+      \vspace{0.2cm}
+      \textbf{Bước 3} -- Góc Tibia (định lý cosin):
+      $\cos q_3 = \dfrac{D^2 - L_2^2 - L_3^2}{2L_2 L_3}$
+
+      \vspace{0.2cm}
+      \textbf{Bước 4} -- Góc Femur:
+      $q_2 = \mathrm{atan2}(Z,d) - \mathrm{atan2}(L_3\sin q_3,\, L_2+L_3\cos q_3)$
+    \column{0.48\textwidth}
+      \begin{block}{Lựa chọn cấu hình}
+        Elbow-down ($q_3 > 0$) -- đảm bảo khoảng tĩnh không dưới thân robot
+      \end{block}
+      \vspace{0.3cm}
+      \begin{alertblock}{Ứng dụng}
+        IK là bài toán cốt lõi: lập trình quỹ đạo bằng tọa độ $(x,y,z)$ Descartes
+        rồi tự động tính góc servo
+      \end{alertblock}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 3.4: Thuật toán dáng đi ----
+\begin{frame}{Thuật Toán Dáng Đi (Gait Algorithm)}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+      \centering
+      \begin{tabular}{lccc}
+        \toprule
+        \textbf{Gait} & \textbf{Swing} & \textbf{Duty $\beta$} & \textbf{Ổn định} \\
+        \midrule
+        Tripod & 3 chân & 0.50 & 3 điểm tựa \\
+        Ripple & 2 chân & 0.67 & 4 điểm tựa \\
+        Wave   & 1 chân & 0.83 & 5 điểm tựa \\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.3cm}
+
+      \begin{block}{Chọn: Tripod Gait}
+        6 chân $\to$ 2 nhóm tam giác (1,3,5) và (2,4,6) xen kẽ nhau
+      \end{block}
+    \column{0.42\textwidth}
+      \textbf{Đặc trưng dáng đi:}
+      \begin{itemize}
+        \item \textbf{Duty factor $\beta$}: tỉ lệ thời gian chân tiếp đất
+        \item \textbf{Swing phase}: chân trên không -- quỹ đạo cung
+        \item \textbf{Stance phase}: chân tiếp đất -- đẩy thân tiến
+      \end{itemize}
+      \vspace{0.2cm}
+      \textit{Tripod đảm bảo $\beta > 0.5$ -- luôn có tam giác đỡ bao quanh trọng tâm}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 3.5: Sản phẩm tham khảo - MiniRHex ----
+\begin{frame}{Sản Phẩm Tham Khảo: Robot MiniRHex}
+  \begin{columns}[T]
+    \column{0.42\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{minirhex.png}
+      \\\small\textit{Robot MiniRHex}
+    \column{0.55\textwidth}
+      \textbf{Đặc điểm nổi bật:}
+      \begin{itemize}
+        \item Chân đàn hồi hình chữ C -- mỗi chân chỉ 1 động cơ
+        \item Vi điều khiển ESP32
+        \item 6 mạch cầu H điều khiển 6 động cơ độc lập
+        \item Cảm biến IMU (BNO055/MPU6050)
+      \end{itemize}
+      \vspace{0.2cm}
+      \textbf{So sánh với đề tài:}
+      \begin{itemize}
+        \item[$\oplus$] Đơn giản hơn (1 DOF/chân)
+        \item[$\ominus$] Kém linh hoạt -- không thực hiện IK
+        \item[$\ominus$] Không điều chỉnh được từng chân độc lập
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 3.6: Sản phẩm tham khảo - miniHexa ----
+\begin{frame}{Sản Phẩm Tham Khảo: Robot miniHexa (Hiwonder)}
+  \begin{columns}[T]
+    \column{0.42\textwidth}
+      \centering
+      \includegraphics[width=\linewidth, height=0.55\textheight, keepaspectratio]{minihexa.png}
+      \\\small\textit{Robot miniHexa -- Hiwonder}
+    \column{0.55\textwidth}
+      \textbf{Cấu hình tương tự đề tài:}
+      \begin{itemize}
+        \item ESP32 + 18 micro servo 3 DOF/chân
+        \item Module AI Vision, nhận diện giọng nói
+        \item Cảm biến siêu âm, cảm biến chạm, IMU
+      \end{itemize}
+      \vspace{0.2cm}
+      \textbf{Tham khảo từ miniHexa:}
+      \begin{itemize}
+        \item Cấu trúc cơ khí Coxa--Femur--Tibia
+        \item Sơ đồ bố trí điện (hiwonder\_electrical)
+        \item Lưu đồ điều khiển vận hành
+      \end{itemize}
+  \end{columns}
+\end{frame}

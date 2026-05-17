@@ -1,93 +1,53 @@
 % ============================================================
 % CHƯƠNG 1: NHẬN BIẾT NHU CẦU
 % ============================================================
-
 \section{Nhận Biết Nhu Cầu}
 
-% ---- Slide 1.1: Bối cảnh ----
-\begin{frame}{Bối Cảnh Và Vấn Đề Đặt Ra}
+% ---- Slide 1.1: Bối cảnh + Nhu cầu ----
+\begin{frame}{Bối Cảnh Và Nhu Cầu Thực Tiễn}
   \begin{columns}[T]
-    \column{0.55\textwidth}
+    \column{0.52\textwidth}
       \textbf{Robot di động truyền thống:}
       \begin{itemize}
-        \item Robot bánh xe / dải xích chiếm ưu thế
-        \item Kém hiệu quả trên địa hình gồ ghề
-        \item Hạn chế trong không gian chật hẹp, có chướng ngại vật
+        \item Bánh xe / dải xích -- hạn chế trên địa hình gồ ghề
+        \item Kém linh hoạt trong không gian chật hẹp
       \end{itemize}
-      \vspace{0.4cm}
-      \textbf{Nhu cầu thực tiễn:}
+      \vspace{0.2cm}
+      \textbf{Nhu cầu thực tiễn cần đáp ứng:}
       \begin{itemize}
-        \item Thăm dò, cứu hộ, giám sát môi trường
-        \item Địa hình tự nhiên: rừng núi, đống đổ nát, hầm lò
+        \item \textbf{Đa địa hình:} Mỗi chân điều chỉnh độc lập
+        \item \textbf{Ổn định:} Tripod gait -- luôn $\geq 3$ chân tiếp đất
+        \item \textbf{Realtime:} IK + đồng bộ 18 servo
+        \item \textbf{Chi phí:} Servo MG996R, ESP32, in 3D
+        \item \textbf{Giáo dục:} Nền tảng nghiên cứu cơ điện tử
       \end{itemize}
-    \column{0.42\textwidth}
+    \column{0.45\textwidth}
       \centering
-      \includegraphics[width=\linewidth]{robot.png}
+      \includegraphics[width=\linewidth, height=0.62\textheight, keepaspectratio]{robot.png}
       \\\small\textit{Robot nhện 6 chân của nhóm}
   \end{columns}
 \end{frame}
 
-% ---- Slide 1.2: Giải pháp ----
-\begin{frame}{Robot Nhện -- Giải Pháp Đầy Tiềm Năng}
-  \begin{block}{Tại sao chọn robot chân?}
-    Lấy cảm hứng từ cấu trúc sinh học của nhện và côn trùng:
-  \end{block}
-  \vspace{0.3cm}
-  \begin{columns}[T]
-    \column{0.48\textwidth}
-      \textbf{Ưu điểm nổi bật:}
-      \begin{itemize}
-        \item Thăng bằng và thích nghi địa hình vượt trội
-        \item Bước qua chướng ngại vật, leo dốc
-        \item Duy trì ổn định khi một số chân mất chức năng
-      \end{itemize}
-    \column{0.48\textwidth}
-      \textbf{Thách thức tích hợp:}
-      \begin{itemize}
-        \item Cơ khí (động học, phân tích lực)
-        \item Điện tử (driver servo, mạch điều khiển)
-        \item Lập trình nhúng (IK, gait controller)
-        \item Truyền thông không dây
-      \end{itemize}
-  \end{columns}
-\end{frame}
-
-% ---- Slide 1.3: Nhu cầu thực tiễn ----
-\begin{frame}{Nhu Cầu Thực Tiễn Cần Đáp Ứng}
-  \begin{itemize}
-    \item<1-> \textbf{Di chuyển đa địa hình:} Hệ thống chân nhiều bậc tự do,
-          mỗi chân điều chỉnh độc lập theo bề mặt tiếp xúc
-    \item<2-> \textbf{Tính ổn định:} Cấu hình 6 chân (hexapod) -- thuật toán
-          dáng đi tam giác (tripod gait), luôn có $\geq 3$ chân tiếp đất
-    \item<3-> \textbf{Điều khiển thời gian thực:} Tính toán động học nghịch
-          (Inverse Kinematics) và đồng bộ toàn bộ khớp servo
-    \item<4-> \textbf{Chi phí hợp lý:} Servo MG996R, vi điều khiển Arduino/STM32,
-          kết cấu in 3D / cắt laser
-    \item<5-> \textbf{Nền tảng nghiên cứu \& giáo dục:} Tích hợp kiến thức cơ
-          học, điện tử, lập trình nhúng và tự động hóa
-  \end{itemize}
-\end{frame}
-
-% ---- Slide 1.4: Lý do chọn đề tài ----
+% ---- Slide 1.3: Lý do chọn đề tài ----
 \begin{frame}{Lý Do Chọn Đề Tài}
   \begin{block}{\centering Thiết kế và chế tạo robot nhện 6 chân}
     \centering Đề tài tích hợp điển hình của ngành Cơ Điện Tử
   \end{block}
-  \vspace{0.3cm}
+  \vspace{0.2cm}
   \begin{columns}[T]
     \column{0.48\textwidth}
       \begin{exampleblock}{Tính hội tụ kiến thức}
         Cơ khí $+$ Điện tử $+$ Lập trình nhúng $+$ Truyền thông không dây
       \end{exampleblock}
-      \vspace{0.2cm}
+      \vspace{0.15cm}
       \begin{exampleblock}{Tính thực tiễn cao}
-        Quân sự, tìm kiếm cứu nạn, kiểm tra đường ống, thám hiểm không gian
+        Quân sự, cứu nạn, kiểm tra đường ống, thám hiểm không gian
       \end{exampleblock}
     \column{0.48\textwidth}
       \begin{exampleblock}{Khả năng thực thi}
-        Máy in 3D, linh kiện phổ biến tại Việt Nam -- hoàn thành trong 1 học kỳ
+        Máy in 3D, linh kiện phổ biến -- hoàn thành trong 1 học kỳ
       \end{exampleblock}
-      \vspace{0.2cm}
+      \vspace{0.15cm}
       \begin{exampleblock}{Giá trị học thuật}
         Tối ưu cấu hình chân, thuật toán dáng đi, mạch điều khiển phân tán
       \end{exampleblock}

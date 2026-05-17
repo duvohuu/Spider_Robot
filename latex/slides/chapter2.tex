@@ -1,0 +1,119 @@
+% ============================================================
+% CHƯƠNG 2: TÍNH KHẢ THI VÀ ĐỊNH RÕ VẤN ĐỀ
+% ============================================================
+\section{Tính Khả Thi Và Định Rõ Vấn Đề}
+
+% ---- Slide 2.1: Phát biểu bài toán ----
+\begin{frame}{Định Rõ Vấn Đề Thiết Kế}
+  \begin{block}{Phát biểu bài toán}
+    Thiết kế và chế tạo robot nhện 6 chân (hexapod) có khả năng di chuyển ổn định,
+    thực hiện các kiểu di chuyển cơ bản, điều khiển từ xa qua WiFi,
+    với chi phí phù hợp môi trường học thuật.
+  \end{block}
+  \vspace{0.3cm}
+  \textbf{Yêu cầu chức năng cốt lõi:}
+  \begin{itemize}
+    \item Di chuyển tiến, lùi, xoay trái/phải; tránh vật cản
+    \item Mỗi chân có 3 DOF: khớp Coxa, Femur, Tibia
+    \item 18 servo được điều khiển đồng bộ theo thuật toán dáng đi
+    \item Nhận lệnh từ xa qua WiFi (WebSocket)
+  \end{itemize}
+\end{frame}
+
+% ---- Slide 2.2: Tính khả thi kỹ thuật ----
+\begin{frame}{Tính Khả Thi Kỹ Thuật}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \begin{exampleblock}{Cơ cấu cơ khí}
+        Hexapod 3 khớp/chân -- phổ biến trong nghiên cứu\\
+        Chi tiết in 3D FDM PLA/PETG -- đủ bền cho robot $< 2$ kg
+      \end{exampleblock}
+      \vspace{0.2cm}
+      \begin{exampleblock}{Dẫn động}
+        Servo MG996R -- moment 9--13 kgf.cm\\
+        Đáp ứng tốt với tải trọng robot cỡ nhỏ
+      \end{exampleblock}
+    \column{0.48\textwidth}
+      \begin{exampleblock}{Điều khiển}
+        ESP32 + PCA9685 -- 32 kênh PWM qua I$^2$C\\
+        IK hình học -- không yêu cầu tài nguyên lớn
+      \end{exampleblock}
+      \vspace{0.2cm}
+      \begin{exampleblock}{Giao tiếp không dây}
+        ESP32 WiFi SoftAP + WebSocket\\
+        Web App (React) -- không cần cài thêm phần mềm
+      \end{exampleblock}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 2.3: Tính khả thi kinh tế ----
+\begin{frame}{Tính Khả Thi Kinh Tế}
+  \centering
+  \begin{tabular}{lccr}
+    \toprule
+    \textbf{Hạng mục} & \textbf{ĐV} & \textbf{SL} & \textbf{Ước tính (VNĐ)} \\
+    \midrule
+    Servo MG996R         & Cái   & 18  & 1.440.000 \\
+    Vi điều khiển ESP32  & Cái   & 1   &   150.000 \\
+    Module PWM PCA9685   & Cái   & 2   &   160.000 \\
+    Vật liệu in 3D (PLA) & Cuộn  & 1--2 &   400.000 \\
+    Pin LiPo 3S 11.1V    & Cái   & 1   &   300.000 \\
+    Pin điều khiển 7.4V  & Cái   & 1   &   150.000 \\
+    Cảm biến siêu âm     & Cái   & 1   &    30.000 \\
+    \midrule
+    \textbf{Tổng cộng}   &       &     & \textbf{\textasciitilde{}2.530.000} \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.4cm}
+
+  \alert{Phù hợp với ngân sách đồ án môn học cấp trường}
+\end{frame}
+
+% ---- Slide 2.4: Kế hoạch triển khai ----
+\begin{frame}{Kế Hoạch Triển Khai (15 Tuần)}
+  \centering
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{Tuần} & \textbf{Nội dung công việc} \\
+    \midrule
+    1--3   & Khảo sát tài liệu, xác định yêu cầu, chọn phương án thiết kế \\
+    4--6   & Thiết kế cơ khí, xuất bản vẽ, tiến hành in 3D \\
+    7--8   & Lắp ráp cơ khí, thiết kế và thi công mạch điện tử \\
+    9--11  & Lập trình thuật toán IK và gait controller \\
+    12--13 & Tích hợp hệ thống, thử nghiệm và hiệu chỉnh \\
+    14--15 & Hoàn thiện sản phẩm, viết báo cáo và chuẩn bị bảo vệ \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+% ---- Slide 2.5: Ràng buộc và tiêu chí ----
+\begin{frame}{Ràng Buộc Và Tiêu Chí Thiết Kế}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \textbf{Ràng buộc kích thước:}
+      \begin{itemize}
+        \item Thân (không tính chân): $\leq 25$ cm
+        \item Rải rộng khi chân mở: $\leq 50$ cm
+        \item Tổng trọng lượng: $< 2$ kg
+      \end{itemize}
+      \vspace{0.2cm}
+      \textbf{Ràng buộc dẫn động:}
+      \begin{itemize}
+        \item Servo RC: moment $\geq 9$ kgf.cm
+        \item Góc khai thác: $\pm 60°$ quanh trung tính
+      \end{itemize}
+    \column{0.48\textwidth}
+      \textbf{Tiêu chí hiệu năng:}
+      \begin{itemize}
+        \item Tốc độ tối thiểu: 5 cm/s
+        \item Hoạt động liên tục $\geq 15$ phút
+        \item Tần số cập nhật servo $\geq 50$ Hz
+      \end{itemize}
+      \vspace{0.2cm}
+      \textbf{Tiêu chí an toàn:}
+      \begin{itemize}
+        \item Cầu chì bảo vệ nguồn
+        \item Servo về vị trí an toàn khi mất tín hiệu
+      \end{itemize}
+  \end{columns}
+\end{frame}

@@ -1,12 +1,52 @@
 % ---- Trang bìa ----
-\begin{frame}
-  \begin{columns}[c]
-    \column{0.15\textwidth}
-      \centering
-      \includegraphics[width=2cm]{hcmut.png}
-    \column{0.85\textwidth}
-      \titlepage
-  \end{columns}
+\begin{frame}[plain, noframenumbering]
+  \begin{tikzpicture}[remember picture, overlay]
+    % Header bar
+    \fill[hcmutblue]
+      (current page.north west)
+      rectangle ([yshift=-2.6cm]current page.north east);
+    % Footer bar
+    \fill[hcmutblue!20]
+      (current page.south west)
+      rectangle ([yshift=0.85cm]current page.south east);
+    % HCMUT logo
+    \node[anchor=north west, inner sep=0.18cm]
+      at (current page.north west)
+      {\includegraphics[height=2.2cm]{hcmut.png}};
+    % University name
+    \node[anchor=west, text=white]
+      at ([xshift=2.9cm, yshift=-0.75cm]current page.north west)
+      {\small\bfseries Trường Đại Học Bách Khoa -- ĐHQG TP.HCM};
+    \node[anchor=west, text=white!80]
+      at ([xshift=2.9cm, yshift=-1.45cm]current page.north west)
+      {\footnotesize Khoa Cơ Khí \enspace|\enspace Thiết Kế Hệ Thống Cơ Điện Tử \enspace|\enspace HK252};
+    % Separator line
+    \draw[hcmutgold, line width=1.5pt]
+      ([xshift=0.5cm, yshift=-2.65cm]current page.north west)
+      -- ([xshift=-0.5cm, yshift=-2.65cm]current page.north east);
+    % Date in footer
+    \node[anchor=south, text=hcmutblue, yshift=0.18cm]
+      at (current page.south)
+      {\footnotesize TP.HCM, \today};
+  \end{tikzpicture}
+
+  \vspace{2.3cm}
+  \begin{center}
+    {\color{hcmutblue}\LARGE\bfseries Thiết Kế Robot 6 Chân Dạng Nhện}\\[0.25cm]
+    {\color{hcmutblue!70}\normalsize\itshape Báo cáo đồ án -- Thiết Kế Hệ Thống Cơ Điện Tử -- Lớp L01}
+  \end{center}
+
+  \vspace{0.5cm}
+  \begin{center}
+    \small
+    \begin{tabular}{r@{\hspace{0.4cm}}l@{\hspace{1.2cm}}r@{\hspace{0.4cm}}l}
+      \multicolumn{4}{c}{\color{hcmutblue}\normalsize\bfseries Nhóm 05} \\[0.2cm]
+      Võ Hữu Dư       & \texttt{2210604} &
+      Nguyễn Việt Chương   & \texttt{2210398} \\[0.1cm]
+      Trần Quang Đạo   & \texttt{2210647} &
+      Nguyễn Hoàng Thái Khang & \texttt{2211448} \\
+    \end{tabular}
+  \end{center}
 \end{frame}
 
 % ---- Mục lục ----

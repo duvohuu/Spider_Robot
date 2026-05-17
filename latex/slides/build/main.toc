@@ -1,1 +1,7 @@
 \beamer@sectionintoc {1}{Nhận Biết Nhu Cầu}{3}{0}{1}
+\beamer@sectionintoc {2}{Tính Khả Thi Và Định Rõ Vấn Đề}{5}{0}{2}
+\beamer@sectionintoc {3}{Thu Thập Thông Tin Và Tổng Hợp}{10}{0}{3}
+\beamer@sectionintoc {4}{Phân Tích Và Mô Hình Hóa}{16}{0}{4}
+\beamer@sectionintoc {5}{Thiết Kế Khái Quát}{21}{0}{5}
+\beamer@sectionintoc {6}{Thiết Kế Chi Tiết}{26}{0}{6}
+\beamer@sectionintoc {7}{Kiểm Tra, Tinh Chỉnh và Sản Xuất}{30}{0}{7}

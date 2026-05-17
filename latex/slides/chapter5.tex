@@ -1,0 +1,114 @@
+% ============================================================
+% CHƯƠNG 5: THIẾT KẾ KHÁI QUÁT
+% ============================================================
+\section{Thiết Kế Khái Quát}
+
+% ---- Slide 5.1: Lựa chọn cấu hình ----
+\begin{frame}{Lựa Chọn Cấu Hình Robot}
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+      \centering
+      \begin{tabular}{lcc}
+        \toprule
+        \textbf{Cấu hình} & \textbf{Servo} & \textbf{Đánh giá} \\
+        \midrule
+        4 chân & 12 & Kém ổn định \\
+        \textbf{6 chân} & \textbf{18} & \textbf{Được chọn} \\
+        8 chân & 24 & Quá nặng / đắt \\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.3cm}
+
+      \includegraphics[width=\linewidth, height=0.44\textheight, keepaspectratio]{hexapod_layout.png}
+      \\\small\textit{Bố trí 6 chân đối xứng}
+    \column{0.47\textwidth}
+      \textbf{Thông số thiết kế cơ bản:}
+      \begin{itemize}
+        \item Số chân: 6, mỗi chân 3 DOF
+        \item Tổng servo: $6 \times 3 = 18$
+        \item Khối lượng: $\approx 2$ kg
+        \item Vận tốc mong muốn: 5 cm/s
+        \item Dáng đi chính: Tripod gait
+      \end{itemize}
+      \vspace{0.2cm}
+      \begin{block}{Lý do chọn 6 chân}
+        Cân bằng: ổn định tốt -- điều khiển vừa phải -- chi phí hợp lý
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 5.2: Thiết kế cơ khí khái quát ----
+\begin{frame}{Thiết Kế Khái Quát Cơ Khí}
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+      \centering
+      \includegraphics[width=0.85\linewidth]{leg_3dof.png}
+      \\\small\textit{Cấu trúc 3-DOF một chân}
+    \column{0.47\textwidth}
+      \textbf{Ba khớp mỗi chân:}
+      \begin{itemize}
+        \item \textbf{Coxa:} Xoay ngang -- xác định hướng bước
+        \item \textbf{Femur:} Nâng/hạ chân -- điều chỉnh chiều cao thân
+        \item \textbf{Tibia:} Gấp/duỗi -- ổn định điểm tiếp đất
+      \end{itemize}
+      \vspace{0.2cm}
+      \textbf{Định hướng bố trí:}
+      \begin{itemize}
+        \item Đối xứng qua trục dọc thân
+        \item Mạch + pin ở trung tâm (giảm lệch trọng tâm)
+        \item Module chân tháo lắp độc lập
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 5.3: Lựa chọn linh kiện điện ----
+\begin{frame}{Thiết Kế Khái Quát Điện -- Lựa Chọn Linh Kiện}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \begin{block}{Vi điều khiển: \textbf{ESP32}}
+        \small 240 MHz dual-core, RAM 520 KB\\
+        WiFi + BT -- IK realtime 6 chân
+      \end{block}
+      \vspace{0.1cm}
+      \begin{block}{Động cơ: \textbf{Servo MG996R $\times$ 18}}
+        \small Bánh răng kim loại\\
+        Moment 9.4--11 kgf.cm (4.8--6V)
+      \end{block}
+    \column{0.48\textwidth}
+      \begin{block}{Mở rộng PWM: \textbf{PCA9685 $\times$ 2}}
+        \small 32 kênh PWM qua I$^2$C\\
+        Giải quyết giới hạn kênh vi điều khiển
+      \end{block}
+      \vspace{0.1cm}
+      \begin{block}{Nguồn: \textbf{Hai nguồn tách biệt}}
+        \small Servo: LiPo 3S 11.1V\\
+        Điều khiển: cell 7.4V 18650\\
+        Cách ly nhiễu -- tránh reset ESP32
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% ---- Slide 5.4: Sơ đồ khối hệ thống điện ----
+\begin{frame}{Sơ Đồ Khối Hệ Thống Điện}
+  \centering
+  \includegraphics[width=0.85\textwidth, height=5.8cm, keepaspectratio]{ElectricalDiagram.pdf}
+\end{frame}
+
+% ---- Slide 5.5: Kiến trúc phần mềm ----
+\begin{frame}{Thiết Kế Khái Quát Phần Mềm}
+  \textbf{Kiến trúc phân tầng 4 lớp:}
+  \vspace{0.2cm}
+  \begin{enumerate}
+    \item \textbf{Communication Layer:} Web App $\xrightarrow{\text{WebSocket/JSON}}$ ESP32 WiFi SoftAP
+    \item \textbf{Coordination Layer:} FreeRTOS -- quản lý trạng thái Idle $\leftrightarrow$ Running,\\
+          tích hợp cảm biến SRF05 (tránh vật cản)
+    \item \textbf{Motion Layer:} Gait controller tính tọa độ đầu chân $(x,y,z)$\\
+          $\Rightarrow$ IK $\Rightarrow$ góc khớp $(\theta_1, \theta_2, \theta_3)$
+    \item \textbf{Actuation Layer:} PCA9685 chuyển góc $\to$ PWM $\to$ 18 servo
+  \end{enumerate}
+  \vspace{0.2cm}
+  \begin{block}{Giao diện người dùng}
+    \textbf{React + Vite} SPA -- WebGL 3D viewer -- không cần cài đặt\\
+    Truy cập qua trình duyệt bất kỳ kết nối WiFi SoftAP của robot
+  \end{block}
+\end{frame}
